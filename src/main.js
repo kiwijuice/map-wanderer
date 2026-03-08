@@ -12,17 +12,137 @@ canvas.height = window.innerHeight;
 
 // ── Generate assets ──
 const tileTextures = generateTileTextures();
-const playerSprites = generatePlayerSprites();
 const map = generateMap();
 
-// ── Game objects ──
-const player = new Player(PLAYER_START.col, PLAYER_START.row, playerSprites);
-const camera = new Camera(canvas.width, canvas.height);
+// ── Character selection ──
+let gameStarted = false;
+let player, camera;
+const previewMan = generatePlayerSprites('man');
+const previewWoman = generatePlayerSprites('woman');
+
+function drawCharacterSelect() {
+    ctx.fillStyle = '#1a1a2e';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Title
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 36px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('City Walker', canvas.width / 2, canvas.height / 2 - 140);
+
+    ctx.font = '18px sans-serif';
+    ctx.fillStyle = '#aaa';
+    ctx.fillText('Choose your character', canvas.width / 2, canvas.height / 2 - 100);
+
+    // Draw two character preview boxes
+    const boxW = 140;
+    const boxH = 180;
+    const gap = 60;
+    const leftX = canvas.width / 2 - boxW - gap / 2;
+    const rightX = canvas.width / 2 + gap / 2;
+    const boxY = canvas.height / 2 - 60;
+
+    // Man box
+    drawCharBox(leftX, boxY, boxW, boxH, previewMan, 'Man', manHovered);
+    // Woman box
+    drawCharBox(rightX, boxY, boxW, boxH, previewWoman, 'Woman', womanHovered);
+
+    ctx.font = '14px sans-serif';
+    ctx.fillStyle = '#666';
+    ctx.fillText('Click to select', canvas.width / 2, boxY + boxH + 40);
+}
+
+let manHovered = false;
+let womanHovered = false;
+
+function drawCharBox(x, y, w, h, sprites, label, hovered) {
+    // Box background
+    ctx.fillStyle = hovered ? '#2a2a4e' : '#222240';
+    ctx.strokeStyle = hovered ? '#6af' : '#444';
+    ctx.lineWidth = hovered ? 2 : 1;
+    ctx.beginPath();
+    ctx.roundRect(x, y, w, h, 12);
+    ctx.fill();
+    ctx.stroke();
+
+    // Draw the front-facing idle frame (dir=0, frame=0)
+    const scale = 3;
+    const fw = sprites.frameW;
+    const fh = sprites.frameH;
+    const drawW = fw * scale;
+    const drawH = fh * scale;
+    const sx = 0;
+    const sy = 0;
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(sprites.canvas, sx, sy, fw, fh,
+        x + w / 2 - drawW / 2, y + 20, drawW, drawH);
+    ctx.imageSmoothingEnabled = true;
+
+    // Label
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 16px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(label, x + w / 2, y + h - 16);
+}
+
+function handleSelectClick(e) {
+    if (gameStarted) return;
+    const rect = canvas.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+
+    const boxW = 140;
+    const boxH = 180;
+    const gap = 60;
+    const leftX = canvas.width / 2 - boxW - gap / 2;
+    const rightX = canvas.width / 2 + gap / 2;
+    const boxY = canvas.height / 2 - 60;
+
+    if (mx >= leftX && mx <= leftX + boxW && my >= boxY && my <= boxY + boxH) {
+        startGame('man');
+    } else if (mx >= rightX && mx <= rightX + boxW && my >= boxY && my <= boxY + boxH) {
+        startGame('woman');
+    }
+}
+
+function handleSelectMove(e) {
+    if (gameStarted) return;
+    const rect = canvas.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+
+    const boxW = 140;
+    const boxH = 180;
+    const gap = 60;
+    const leftX = canvas.width / 2 - boxW - gap / 2;
+    const rightX = canvas.width / 2 + gap / 2;
+    const boxY = canvas.height / 2 - 60;
+
+    manHovered = mx >= leftX && mx <= leftX + boxW && my >= boxY && my <= boxY + boxH;
+    womanHovered = mx >= rightX && mx <= rightX + boxW && my >= boxY && my <= boxY + boxH;
+    canvas.style.cursor = (manHovered || womanHovered) ? 'pointer' : 'default';
+}
+
+canvas.addEventListener('click', handleSelectClick);
+canvas.addEventListener('mousemove', handleSelectMove);
+
+function startGame(charType) {
+    gameStarted = true;
+    canvas.style.cursor = 'none';
+    canvas.removeEventListener('click', handleSelectClick);
+    canvas.removeEventListener('mousemove', handleSelectMove);
+
+    const playerSprites = generatePlayerSprites(charType);
+    player = new Player(PLAYER_START.col, PLAYER_START.row, playerSprites);
+    camera = new Camera(canvas.width, canvas.height);
+    lastTime = performance.now();
+    requestAnimationFrame(gameLoop);
+}
 
 function resize() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
-  camera.resize(canvas.width, canvas.height);
+  if (camera) camera.resize(canvas.width, canvas.height);
 }
 window.addEventListener('resize', resize);
 
@@ -57,6 +177,7 @@ function buildMiniMap() {
     17: '#556',
     18: '#c8b090',
     19: '#e8d5b7',
+    20: '#5aa',
   };
 
   for (let r = 0; r < MAP_ROWS; r++) {
@@ -187,8 +308,9 @@ function gameLoop(now) {
 
       const screen = toScreen(col, row);
       const height = tex.offsetY || 0;
+      const extraW = tex.extraW || 0;
 
-      const drawX = screen.x - camera.x - TILE_W / 2;
+      const drawX = screen.x - camera.x - (TILE_W + extraW) / 2;
       const drawY = screen.y - camera.y - TILE_H / 2 - height;
 
       ctx.drawImage(tex.canvas, drawX, drawY);
@@ -205,4 +327,10 @@ function gameLoop(now) {
   requestAnimationFrame(gameLoop);
 }
 
-requestAnimationFrame(gameLoop);
+// ── Character selection loop ──
+function selectionLoop() {
+    if (gameStarted) return;
+    drawCharacterSelect();
+    requestAnimationFrame(selectionLoop);
+}
+requestAnimationFrame(selectionLoop);

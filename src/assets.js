@@ -323,7 +323,192 @@ export function generateTileTextures() {
         drawDiamondStroke(ctx, cx, cy, '#a89070');
     });
 
+    // Landmark (beautiful isometric building with dome)
+    const lmH = TILE_HEIGHT[TILE.LANDMARK];
+    textures[TILE.LANDMARK] = makeLandmarkTile(lmH);
+
     return textures;
+}
+
+// ── Create landmark building (canvas-drawn with gradients) ──
+function makeLandmarkTile(h) {
+    const canvasW = TILE_W + 40;
+    const canvasH = TILE_H + h + 40;
+    const c = document.createElement('canvas');
+    c.width = canvasW;
+    c.height = canvasH;
+    const ctx = c.getContext('2d');
+    const cx = canvasW / 2;
+    const cy = canvasH - HH;
+
+    // Left face with gradient
+    const grdL = ctx.createLinearGradient(cx - HW, cy, cx, cy + HH);
+    grdL.addColorStop(0, '#d4c5a0');
+    grdL.addColorStop(1, '#b8a880');
+    ctx.fillStyle = grdL;
+    ctx.beginPath();
+    ctx.moveTo(cx - HW, cy);
+    ctx.lineTo(cx, cy + HH);
+    ctx.lineTo(cx, cy + HH - h);
+    ctx.lineTo(cx - HW, cy - h);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = '#998870';
+    ctx.lineWidth = 0.5;
+    ctx.stroke();
+
+    // Right face with gradient
+    const grdR = ctx.createLinearGradient(cx + HW, cy, cx, cy + HH);
+    grdR.addColorStop(0, '#c8b890');
+    grdR.addColorStop(1, '#a89870');
+    ctx.fillStyle = grdR;
+    ctx.beginPath();
+    ctx.moveTo(cx + HW, cy);
+    ctx.lineTo(cx, cy + HH);
+    ctx.lineTo(cx, cy + HH - h);
+    ctx.lineTo(cx + HW, cy - h);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Top face
+    ctx.fillStyle = '#5a9977';
+    ctx.beginPath();
+    ctx.moveTo(cx, cy - HH - h);
+    ctx.lineTo(cx + HW, cy - h);
+    ctx.lineTo(cx, cy + HH - h);
+    ctx.lineTo(cx - HW, cy - h);
+    ctx.closePath();
+    ctx.fill();
+
+    // Pillars on left face
+    ctx.fillStyle = '#e8dcc0';
+    for (const i of [1, 3]) {
+        const t = i / 4;
+        const px = cx - HW + t * HW;
+        const py = cy + HH * (t - 1);
+        ctx.fillRect(px - 1.5, py - h + 4, 3, h - 8);
+        ctx.strokeStyle = '#c0b090';
+        ctx.lineWidth = 0.3;
+        ctx.strokeRect(px - 1.5, py - h + 4, 3, h - 8);
+    }
+    // Pillars on right face
+    ctx.fillStyle = '#d8ccb0';
+    for (const i of [1, 3]) {
+        const t = i / 4;
+        const px = cx + t * HW;
+        const py = cy + HH * t;
+        ctx.fillRect(px - 1.5, py - h + 4, 3, h - 8);
+        ctx.strokeStyle = '#b0a080';
+        ctx.lineWidth = 0.3;
+        ctx.strokeRect(px - 1.5, py - h + 4, 3, h - 8);
+    }
+
+    // Windows on both faces
+    ctx.fillStyle = '#ffeebb';
+    ctx.strokeStyle = '#aa9060';
+    ctx.lineWidth = 0.5;
+    for (let row = 0; row < 3; row++) {
+        const wy = 10 + row * 22;
+        if (wy >= h - 12) break;
+        for (let i = 0; i < 3; i++) {
+            const t = (i + 1) / 4;
+            // Left face windows
+            let wx = cx - HW + t * HW;
+            let baseY = cy + HH * (t - 1);
+            ctx.beginPath();
+            ctx.moveTo(wx - 3, baseY - h + wy);
+            ctx.lineTo(wx + 3, baseY - h + wy);
+            ctx.lineTo(wx + 3, baseY - h + wy + 8);
+            ctx.lineTo(wx, baseY - h + wy + 10);
+            ctx.lineTo(wx - 3, baseY - h + wy + 8);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+            // Right face windows
+            wx = cx + t * HW;
+            baseY = cy + HH * t;
+            ctx.beginPath();
+            ctx.moveTo(wx - 3, baseY - h + wy);
+            ctx.lineTo(wx + 3, baseY - h + wy);
+            ctx.lineTo(wx + 3, baseY - h + wy + 8);
+            ctx.lineTo(wx, baseY - h + wy + 10);
+            ctx.lineTo(wx - 3, baseY - h + wy + 8);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+        }
+    }
+
+    // Cornice line
+    ctx.strokeStyle = '#c0b090';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(cx - HW, cy - h + 2);
+    ctx.lineTo(cx, cy - HH - h + 2);
+    ctx.lineTo(cx + HW, cy - h + 2);
+    ctx.stroke();
+
+    // Door (arched)
+    ctx.fillStyle = '#654';
+    ctx.beginPath();
+    ctx.arc(cx - HW / 2, cy - 11, 4, Math.PI, 0);
+    ctx.lineTo(cx - HW / 2 + 4, cy - 4);
+    ctx.lineTo(cx - HW / 2 - 4, cy - 4);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = '#432';
+    ctx.lineWidth = 0.5;
+    ctx.stroke();
+
+    // Dome base
+    const domeY = cy - h - HH;
+    ctx.fillStyle = '#5a9977';
+    ctx.beginPath();
+    ctx.ellipse(cx, domeY + 4, 14, 6, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Dome with radial gradient
+    const grdDome = ctx.createRadialGradient(cx - 3, domeY - 6, 2, cx, domeY, 14);
+    grdDome.addColorStop(0, '#7cc');
+    grdDome.addColorStop(0.5, '#5aa');
+    grdDome.addColorStop(1, '#488');
+    ctx.fillStyle = grdDome;
+    ctx.beginPath();
+    ctx.ellipse(cx, domeY - 4, 12, 14, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#5a9';
+    ctx.lineWidth = 0.5;
+    ctx.stroke();
+
+    // Dome highlight
+    ctx.fillStyle = 'rgba(255,255,255,0.15)';
+    ctx.beginPath();
+    ctx.ellipse(cx - 3, domeY - 8, 5, 8, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Spire
+    const grdSpire = ctx.createLinearGradient(cx, domeY - 18, cx, domeY - 32);
+    grdSpire.addColorStop(0, '#c90');
+    grdSpire.addColorStop(1, '#fd2');
+    ctx.strokeStyle = grdSpire;
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(cx, domeY - 18);
+    ctx.lineTo(cx, domeY - 30);
+    ctx.stroke();
+
+    // Spire ornament
+    ctx.fillStyle = '#fd2';
+    ctx.beginPath();
+    ctx.arc(cx, domeY - 31, 2.5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#c90';
+    ctx.lineWidth = 0.5;
+    ctx.stroke();
+
+    return { canvas: c, offsetY: h + 40, extraW: 40 };
 }
 
 // ── Draw windows on building faces ──
@@ -350,10 +535,10 @@ function drawBuildingWindows(ctx, cx, cy, h, winColor) {
 }
 
 // ── Generate player sprite sheet (4 directions x 4 frames) ──
-export function generatePlayerSprites() {
+export function generatePlayerSprites(type = 'man') {
     const frameW = 32;
     const frameH = 48;
-    const directions = 4; // 0=down-right, 1=down-left, 2=up-left, 3=up-right (iso directions)
+    const directions = 4;
     const frames = 4;
 
     const c = document.createElement('canvas');
@@ -361,11 +546,13 @@ export function generatePlayerSprites() {
     c.height = frameH * directions;
     const ctx = c.getContext('2d');
 
+    const drawFn = type === 'woman' ? drawWomanFrame : drawPlayerFrame;
+
     for (let dir = 0; dir < directions; dir++) {
         for (let frame = 0; frame < frames; frame++) {
             const ox = frame * frameW;
             const oy = dir * frameH;
-            drawPlayerFrame(ctx, ox, oy, frameW, frameH, dir, frame);
+            drawFn(ctx, ox, oy, frameW, frameH, dir, frame);
         }
     }
 
@@ -453,5 +640,141 @@ function drawPlayerFrame(ctx, ox, oy, w, h, dir, frame) {
             ctx.fillRect(cx, oy + 13 + bobY, 2, 2);
             ctx.fillRect(cx - 4, oy + 17 + bobY, 4, 1);
         }
+    }
+}
+
+// ── Woman character sprite ──
+function drawWomanFrame(ctx, ox, oy, w, h, dir, frame) {
+    const cx = ox + w / 2;
+    const legOffset = [0, 3, 0, -3][frame];
+    const bobY = [0, -1, 0, -1][frame];
+
+    // Shadow
+    ctx.fillStyle = 'rgba(0,0,0,0.2)';
+    ctx.beginPath();
+    ctx.ellipse(cx, oy + h - 4, 10, 4, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Dress body (A-line shape)
+    ctx.fillStyle = '#d45';
+    ctx.beginPath();
+    ctx.moveTo(cx - 7, oy + 20 + bobY);
+    ctx.lineTo(cx + 7, oy + 20 + bobY);
+    ctx.lineTo(cx + 9, oy + 34 + bobY);
+    ctx.lineTo(cx - 9, oy + 34 + bobY);
+    ctx.closePath();
+    ctx.fill();
+
+    // Belt
+    ctx.fillStyle = '#b03';
+    ctx.fillRect(cx - 7, oy + 26 + bobY, 14, 2);
+
+    // Arms (skin)
+    ctx.fillStyle = '#f4c68a';
+    if (dir === 0 || dir === 1) {
+        ctx.fillRect(cx - 10, oy + 21 + bobY, 3, 10);
+        ctx.fillRect(cx + 7, oy + 21 + bobY, 3, 10);
+    } else if (dir === 2) {
+        ctx.fillRect(cx - 4, oy + 21 + bobY, 3, 10);
+    } else {
+        ctx.fillRect(cx + 1, oy + 21 + bobY, 3, 10);
+    }
+
+    // Legs
+    ctx.fillStyle = '#f4c68a';
+    ctx.fillRect(cx - 4, oy + 34 + bobY, 3, 6 + legOffset);
+    ctx.fillRect(cx + 1, oy + 34 + bobY, 3, 6 - legOffset);
+
+    // Shoes
+    ctx.fillStyle = '#c35';
+    ctx.fillRect(cx - 5, oy + 39 + legOffset + bobY, 4, 3);
+    ctx.fillRect(cx + 1, oy + 39 - legOffset + bobY, 4, 3);
+
+    // Head
+    ctx.fillStyle = '#f4c68a';
+    ctx.beginPath();
+    ctx.ellipse(cx, oy + 14 + bobY, 8, 9, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Blonde hair
+    ctx.fillStyle = '#f0c040';
+    if (dir === 2 || dir === 3) {
+        // Back view - full hair
+        ctx.beginPath();
+        ctx.ellipse(cx, oy + 12 + bobY, 10, 9, 0, 0, Math.PI * 2);
+        ctx.fill();
+        // Long hair down back
+        ctx.beginPath();
+        ctx.moveTo(cx - 8, oy + 12 + bobY);
+        ctx.lineTo(cx + 8, oy + 12 + bobY);
+        ctx.lineTo(cx + 6, oy + 28 + bobY);
+        ctx.quadraticCurveTo(cx, oy + 30 + bobY, cx - 6, oy + 28 + bobY);
+        ctx.closePath();
+        ctx.fill();
+    } else {
+        // Front - top hair + side locks
+        ctx.beginPath();
+        ctx.ellipse(cx, oy + 9 + bobY, 10, 6, 0, 0, Math.PI);
+        ctx.fill();
+        // Side locks
+        ctx.beginPath();
+        ctx.moveTo(cx - 10, oy + 8 + bobY);
+        ctx.lineTo(cx - 10, oy + 22 + bobY);
+        ctx.quadraticCurveTo(cx - 8, oy + 24 + bobY, cx - 7, oy + 22 + bobY);
+        ctx.lineTo(cx - 7, oy + 8 + bobY);
+        ctx.closePath();
+        ctx.fill();
+        ctx.beginPath();
+        ctx.moveTo(cx + 10, oy + 8 + bobY);
+        ctx.lineTo(cx + 10, oy + 22 + bobY);
+        ctx.quadraticCurveTo(cx + 8, oy + 24 + bobY, cx + 7, oy + 22 + bobY);
+        ctx.lineTo(cx + 7, oy + 8 + bobY);
+        ctx.closePath();
+        ctx.fill();
+    }
+
+    // Hair highlight
+    ctx.fillStyle = '#f8d860';
+    if (dir !== 2 && dir !== 3) {
+        ctx.beginPath();
+        ctx.ellipse(cx - 2, oy + 7 + bobY, 5, 3, -0.3, 0, Math.PI);
+        ctx.fill();
+    }
+
+    // Face
+    if (dir === 0 || dir === 1) {
+        // Blue eyes
+        ctx.fillStyle = '#38a';
+        if (dir === 0) {
+            ctx.beginPath();
+            ctx.ellipse(cx - 1, oy + 13 + bobY, 1.5, 1.5, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.ellipse(cx + 5, oy + 13 + bobY, 1.5, 1.5, 0, 0, Math.PI * 2);
+            ctx.fill();
+        } else {
+            ctx.beginPath();
+            ctx.ellipse(cx - 5, oy + 13 + bobY, 1.5, 1.5, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.ellipse(cx + 1, oy + 13 + bobY, 1.5, 1.5, 0, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        // Eyelashes
+        ctx.strokeStyle = '#333';
+        ctx.lineWidth = 0.7;
+        if (dir === 0) {
+            ctx.beginPath(); ctx.moveTo(cx - 3, oy + 11.5 + bobY); ctx.lineTo(cx + 1, oy + 11.5 + bobY); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(cx + 3, oy + 11.5 + bobY); ctx.lineTo(cx + 7, oy + 11.5 + bobY); ctx.stroke();
+        } else {
+            ctx.beginPath(); ctx.moveTo(cx - 7, oy + 11.5 + bobY); ctx.lineTo(cx - 3, oy + 11.5 + bobY); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(cx - 1, oy + 11.5 + bobY); ctx.lineTo(cx + 3, oy + 11.5 + bobY); ctx.stroke();
+        }
+        // Lips
+        ctx.fillStyle = '#e55';
+        ctx.beginPath();
+        const lx = dir === 0 ? cx + 1 : cx - 1;
+        ctx.ellipse(lx, oy + 17 + bobY, 2.5, 1, 0, 0, Math.PI * 2);
+        ctx.fill();
     }
 }

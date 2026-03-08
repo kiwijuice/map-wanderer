@@ -123,10 +123,15 @@ export function generateMap() {
     fillRect(28, 28, 33, 32, T.BUILDING_GRAY);
     fillRect(28, 34, 33, 38, T.BUILDING_TALL);
 
-    // Block 7: plaza & shops
+    // Block 7: plaza & shops with landmark
     fillRect(23, 43, 33, 53, T.PLAZA);
     fillRect(25, 45, 27, 48, T.BUILDING_SHOP);
     fillRect(25, 50, 27, 52, T.BUILDING_SHOP);
+    // Landmark cathedral in center of plaza
+    map[28][48] = T.LANDMARK;
+    map[28][49] = T.LANDMARK;
+    map[29][48] = T.LANDMARK;
+    map[29][49] = T.LANDMARK;
     fillRect(30, 45, 32, 48, T.BUILDING_SHOP);
     fillRect(30, 50, 32, 52, T.BUILDING_SHOP);
     // Fountain area in center
