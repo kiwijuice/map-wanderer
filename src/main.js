@@ -179,6 +179,7 @@ function buildMiniMap() {
     19: '#e8d5b7',
     20: '#5aa',
     21: '#4ab8d0',
+    22: '#3a90b0',
   };
 
   for (let r = 0; r < MAP_ROWS; r++) {

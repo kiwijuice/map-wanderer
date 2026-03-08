@@ -331,6 +331,13 @@ export async function generateTileTextures() {
     const officeH = TILE_HEIGHT[TILE.BUILDING_OFFICE];
     textures[TILE.BUILDING_OFFICE] = await makeOfficeTile(officeH);
 
+    // File-based SVG building (loaded from public/assets/buildings/)
+    textures[TILE.BUILDING_MODERN] = await loadSvgTile(
+        '/assets/buildings/modern-tower.svg',
+        TILE_HEIGHT[TILE.BUILDING_MODERN] + 22, // offsetY = h + top padding
+        36 // extraW
+    );
+
     return textures;
 }
 
@@ -655,6 +662,23 @@ function makeOfficeTile(h) {
             URL.revokeObjectURL(url);
             resolve({ canvas: c, offsetY: h + 30, extraW });
         };
+        img.src = url;
+    });
+}
+
+// ── Load an SVG tile from a file URL (public/assets/buildings/) ──
+function loadSvgTile(url, offsetY, extraW = 0) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+            const c = document.createElement('canvas');
+            c.width = img.naturalWidth;
+            c.height = img.naturalHeight;
+            const ctx = c.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+            resolve({ canvas: c, offsetY, extraW });
+        };
+        img.onerror = () => reject(new Error(`Failed to load SVG: ${url}`));
         img.src = url;
     });
 }

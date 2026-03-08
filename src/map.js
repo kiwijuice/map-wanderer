@@ -132,6 +132,11 @@ export function generateMap() {
     map[28][49] = T.LANDMARK;
     map[29][48] = T.LANDMARK;
     map[29][49] = T.LANDMARK;
+    // Modern tower (file-based SVG) in the plaza
+    map[26][49] = T.BUILDING_MODERN;
+    map[26][50] = T.BUILDING_MODERN;
+    map[27][49] = T.BUILDING_MODERN;
+    map[27][50] = T.BUILDING_MODERN;
     fillRect(30, 45, 32, 48, T.BUILDING_SHOP);
     fillRect(30, 50, 32, 52, T.BUILDING_SHOP);
     // Fountain area in center
