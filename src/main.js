@@ -17,7 +17,16 @@ const map = generateMap();
 // ── Character selection ──
 let gameStarted = false;
 let player, camera;
-let previewMan, previewWoman;
+
+const CHARACTERS = [
+  { id: 'man', label: 'Man', style: 'Classic' },
+  { id: 'woman', label: 'Woman', style: 'Classic' },
+  { id: 'cartoon-boy', label: 'Explorer', style: 'Cartoon' },
+  { id: 'cartoon-girl', label: 'Artist', style: 'Cartoon' },
+  { id: 'suit-man', label: 'Gentleman', style: 'Elegant' },
+  { id: 'chic-woman', label: 'Chic', style: 'Elegant' },
+];
+const charPreviews = {};
 
 function drawCharacterSelect() {
   ctx.fillStyle = '#1a1a2e';
@@ -27,34 +36,38 @@ function drawCharacterSelect() {
   ctx.fillStyle = '#fff';
   ctx.font = 'bold 36px sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText('City Walker', canvas.width / 2, canvas.height / 2 - 140);
+  ctx.fillText('City Walker', canvas.width / 2, canvas.height / 2 - 200);
 
   ctx.font = '18px sans-serif';
   ctx.fillStyle = '#aaa';
-  ctx.fillText('Choose your character', canvas.width / 2, canvas.height / 2 - 100);
+  ctx.fillText('Choose your character', canvas.width / 2, canvas.height / 2 - 165);
 
-  // Draw two character preview boxes
-  const boxW = 140;
-  const boxH = 180;
-  const gap = 60;
-  const leftX = canvas.width / 2 - boxW - gap / 2;
-  const rightX = canvas.width / 2 + gap / 2;
-  const boxY = canvas.height / 2 - 60;
+  // 3 columns × 2 rows grid
+  const cols = 3, rows = 2;
+  const boxW = 120, boxH = 160, gapX = 30, gapY = 24;
+  const gridW = cols * boxW + (cols - 1) * gapX;
+  const gridH = rows * boxH + (rows - 1) * gapY;
+  const startX = canvas.width / 2 - gridW / 2;
+  const startY = canvas.height / 2 - gridH / 2 - 10;
 
-  // Man box
-  drawCharBox(leftX, boxY, boxW, boxH, previewMan, 'Man', manHovered);
-  // Woman box
-  drawCharBox(rightX, boxY, boxW, boxH, previewWoman, 'Woman', womanHovered);
+  for (let i = 0; i < CHARACTERS.length; i++) {
+    const c = Math.floor(i % cols);
+    const r = Math.floor(i / cols);
+    const x = startX + c * (boxW + gapX);
+    const y = startY + r * (boxH + gapY);
+    const ch = CHARACTERS[i];
+    const sprites = charPreviews[ch.id];
+    if (sprites) drawCharBox(x, y, boxW, boxH, sprites, ch.label, ch.style, hoveredIdx === i);
+  }
 
   ctx.font = '14px sans-serif';
   ctx.fillStyle = '#666';
-  ctx.fillText('Click to select', canvas.width / 2, boxY + boxH + 40);
+  ctx.fillText('Click to select', canvas.width / 2, startY + gridH + 30);
 }
 
-let manHovered = false;
-let womanHovered = false;
+let hoveredIdx = -1;
 
-function drawCharBox(x, y, w, h, sprites, label, hovered) {
+function drawCharBox(x, y, w, h, sprites, label, style, hovered) {
   // Box background
   ctx.fillStyle = hovered ? '#2a2a4e' : '#222240';
   ctx.strokeStyle = hovered ? '#6af' : '#444';
@@ -64,62 +77,64 @@ function drawCharBox(x, y, w, h, sprites, label, hovered) {
   ctx.fill();
   ctx.stroke();
 
+  // Style badge
+  ctx.font = '10px sans-serif';
+  ctx.fillStyle = '#888';
+  ctx.textAlign = 'center';
+  ctx.fillText(style, x + w / 2, y + 14);
+
   // Draw the front-facing idle frame (dir=0, frame=0)
-  const scale = 3;
+  const scale = 2.5;
   const fw = sprites.frameW;
   const fh = sprites.frameH;
   const drawW = fw * scale;
   const drawH = fh * scale;
-  const sx = 0;
-  const sy = 0;
   ctx.imageSmoothingEnabled = false;
-  ctx.drawImage(sprites.canvas, sx, sy, fw, fh,
+  ctx.drawImage(sprites.canvas, 0, 0, fw, fh,
     x + w / 2 - drawW / 2, y + 20, drawW, drawH);
   ctx.imageSmoothingEnabled = true;
 
   // Label
   ctx.fillStyle = '#fff';
-  ctx.font = 'bold 16px sans-serif';
+  ctx.font = 'bold 14px sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText(label, x + w / 2, y + h - 16);
+  ctx.fillText(label, x + w / 2, y + h - 12);
+}
+
+function getCharGrid() {
+  const cols = 3, rows = 2;
+  const boxW = 120, boxH = 160, gapX = 30, gapY = 24;
+  const gridW = cols * boxW + (cols - 1) * gapX;
+  const gridH = rows * boxH + (rows - 1) * gapY;
+  const startX = canvas.width / 2 - gridW / 2;
+  const startY = canvas.height / 2 - gridH / 2 - 10;
+  return { cols, boxW, boxH, gapX, gapY, startX, startY };
+}
+
+function hitTestChar(mx, my) {
+  const { cols, boxW, boxH, gapX, gapY, startX, startY } = getCharGrid();
+  for (let i = 0; i < CHARACTERS.length; i++) {
+    const c = i % cols;
+    const r = Math.floor(i / cols);
+    const x = startX + c * (boxW + gapX);
+    const y = startY + r * (boxH + gapY);
+    if (mx >= x && mx <= x + boxW && my >= y && my <= y + boxH) return i;
+  }
+  return -1;
 }
 
 function handleSelectClick(e) {
   if (gameStarted) return;
   const rect = canvas.getBoundingClientRect();
-  const mx = e.clientX - rect.left;
-  const my = e.clientY - rect.top;
-
-  const boxW = 140;
-  const boxH = 180;
-  const gap = 60;
-  const leftX = canvas.width / 2 - boxW - gap / 2;
-  const rightX = canvas.width / 2 + gap / 2;
-  const boxY = canvas.height / 2 - 60;
-
-  if (mx >= leftX && mx <= leftX + boxW && my >= boxY && my <= boxY + boxH) {
-    startGame('man');
-  } else if (mx >= rightX && mx <= rightX + boxW && my >= boxY && my <= boxY + boxH) {
-    startGame('woman');
-  }
+  const idx = hitTestChar(e.clientX - rect.left, e.clientY - rect.top);
+  if (idx >= 0) startGame(CHARACTERS[idx].id);
 }
 
 function handleSelectMove(e) {
   if (gameStarted) return;
   const rect = canvas.getBoundingClientRect();
-  const mx = e.clientX - rect.left;
-  const my = e.clientY - rect.top;
-
-  const boxW = 140;
-  const boxH = 180;
-  const gap = 60;
-  const leftX = canvas.width / 2 - boxW - gap / 2;
-  const rightX = canvas.width / 2 + gap / 2;
-  const boxY = canvas.height / 2 - 60;
-
-  manHovered = mx >= leftX && mx <= leftX + boxW && my >= boxY && my <= boxY + boxH;
-  womanHovered = mx >= rightX && mx <= rightX + boxW && my >= boxY && my <= boxY + boxH;
-  canvas.style.cursor = (manHovered || womanHovered) ? 'pointer' : 'default';
+  hoveredIdx = hitTestChar(e.clientX - rect.left, e.clientY - rect.top);
+  canvas.style.cursor = hoveredIdx >= 0 ? 'pointer' : 'default';
 }
 
 canvas.addEventListener('click', handleSelectClick);
@@ -348,11 +363,9 @@ function selectionLoop() {
 // ── Boot: load async assets, then start ──
 Promise.all([
   generateTileTextures(),
-  generatePlayerSprites('man'),
-  generatePlayerSprites('woman'),
-]).then(([tex, manSprites, womanSprites]) => {
+  ...CHARACTERS.map(ch => generatePlayerSprites(ch.id)),
+]).then(([tex, ...sprites]) => {
   tileTextures = tex;
-  previewMan = manSprites;
-  previewWoman = womanSprites;
+  CHARACTERS.forEach((ch, i) => { charPreviews[ch.id] = sprites[i]; });
   requestAnimationFrame(selectionLoop);
 });

@@ -1,0 +1,172 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="192" viewBox="0 0 128 192">
+<!-- Soft Cartoon Isometric Style — Adventurer Boy -->
+<defs>
+  <!-- Vest gradient -->
+  <linearGradient id="vest" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#c0764a"/>
+    <stop offset="100%" stop-color="#a0603a"/>
+  </linearGradient>
+  <linearGradient id="tshirt" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#7ec8e3"/>
+    <stop offset="100%" stop-color="#5ba8c8"/>
+  </linearGradient>
+
+  <!-- Shadow -->
+  <g id="sh"><ellipse cx="16" cy="44" rx="10" ry="4" fill="rgba(0,0,0,.18)"/></g>
+
+  <!-- ===== Dir 0 (down-right) upper body ===== -->
+  <g id="u0">
+    <!-- T-shirt body (rounded) -->
+    <rect x="9" y="21" width="14" height="11" rx="3" fill="url(#tshirt)"/>
+    <!-- Vest overlay -->
+    <rect x="8" y="20" width="5" height="12" rx="2" fill="url(#vest)"/>
+    <rect x="19" y="20" width="5" height="12" rx="2" fill="url(#vest)"/>
+    <!-- Vest buttons -->
+    <circle cx="16" cy="24" r="0.8" fill="#806040"/>
+    <circle cx="16" cy="27" r="0.8" fill="#806040"/>
+    <!-- Arms (skin, round) -->
+    <rect x="5" y="21" width="4" height="9" rx="2" fill="#fce4d4"/>
+    <rect x="23" y="21" width="4" height="9" rx="2" fill="#fce4d4"/>
+    <!-- Hands -->
+    <circle cx="7" cy="31" r="2" fill="#fce4d4"/>
+    <circle cx="25" cy="31" r="2" fill="#fce4d4"/>
+    <!-- Head (big round cartoon head) -->
+    <circle cx="16" cy="13" r="9" fill="#fce4d4"/>
+    <!-- Cheeks -->
+    <circle cx="10" cy="15" r="2.5" fill="#f8c0b0" opacity="0.3"/>
+    <circle cx="22" cy="15" r="2.5" fill="#f8c0b0" opacity="0.3"/>
+    <!-- Hair — messy brown mop -->
+    <ellipse cx="16" cy="8" rx="10" ry="6" fill="#6b3e26"/>
+    <circle cx="10" cy="7" r="3.5" fill="#6b3e26"/>
+    <circle cx="22" cy="7" r="3.5" fill="#6b3e26"/>
+    <circle cx="16" cy="4" r="3" fill="#7a4a30"/>
+    <!-- Hair highlight -->
+    <ellipse cx="14" cy="5" rx="3" ry="1.5" fill="#9b6840" opacity="0.5"/>
+    <!-- Eyes (big, cute) — shifted right -->
+    <ellipse cx="14" cy="13" rx="2.2" ry="2.4" fill="white"/>
+    <ellipse cx="20" cy="13" rx="2.2" ry="2.4" fill="white"/>
+    <circle cx="15" cy="13.2" r="1.3" fill="#4a7a50"/>
+    <circle cx="21" cy="13.2" r="1.3" fill="#4a7a50"/>
+    <circle cx="14.5" cy="12.8" r="0.5" fill="white" opacity="0.7"/>
+    <circle cx="20.5" cy="12.8" r="0.5" fill="white" opacity="0.7"/>
+    <!-- Eyebrows -->
+    <line x1="12" y1="10.5" x2="16" y2="10.2" stroke="#5a3420" stroke-width="0.8" stroke-linecap="round"/>
+    <line x1="18.5" y1="10.2" x2="22.5" y2="10.5" stroke="#5a3420" stroke-width="0.8" stroke-linecap="round"/>
+    <!-- Smile -->
+    <path d="M14,16.5 Q16,18 18,16.5" fill="none" stroke="#a06050" stroke-width="0.7" stroke-linecap="round"/>
+    <!-- Nose dot -->
+    <circle cx="17" cy="15" r="0.6" fill="#e0b8a0"/>
+  </g>
+
+  <!-- ===== Dir 1 (down-left) upper body ===== -->
+  <g id="u1">
+    <rect x="9" y="21" width="14" height="11" rx="3" fill="url(#tshirt)"/>
+    <rect x="8" y="20" width="5" height="12" rx="2" fill="url(#vest)"/>
+    <rect x="19" y="20" width="5" height="12" rx="2" fill="url(#vest)"/>
+    <circle cx="16" cy="24" r="0.8" fill="#806040"/>
+    <circle cx="16" cy="27" r="0.8" fill="#806040"/>
+    <rect x="5" y="21" width="4" height="9" rx="2" fill="#fce4d4"/>
+    <rect x="23" y="21" width="4" height="9" rx="2" fill="#fce4d4"/>
+    <circle cx="7" cy="31" r="2" fill="#fce4d4"/>
+    <circle cx="25" cy="31" r="2" fill="#fce4d4"/>
+    <circle cx="16" cy="13" r="9" fill="#fce4d4"/>
+    <circle cx="10" cy="15" r="2.5" fill="#f8c0b0" opacity="0.3"/>
+    <circle cx="22" cy="15" r="2.5" fill="#f8c0b0" opacity="0.3"/>
+    <ellipse cx="16" cy="8" rx="10" ry="6" fill="#6b3e26"/>
+    <circle cx="10" cy="7" r="3.5" fill="#6b3e26"/>
+    <circle cx="22" cy="7" r="3.5" fill="#6b3e26"/>
+    <circle cx="16" cy="4" r="3" fill="#7a4a30"/>
+    <ellipse cx="18" cy="5" rx="3" ry="1.5" fill="#9b6840" opacity="0.5"/>
+    <!-- Eyes shifted left -->
+    <ellipse cx="12" cy="13" rx="2.2" ry="2.4" fill="white"/>
+    <ellipse cx="18" cy="13" rx="2.2" ry="2.4" fill="white"/>
+    <circle cx="11.5" cy="13.2" r="1.3" fill="#4a7a50"/>
+    <circle cx="17.5" cy="13.2" r="1.3" fill="#4a7a50"/>
+    <circle cx="12.5" cy="12.8" r="0.5" fill="white" opacity="0.7"/>
+    <circle cx="18.5" cy="12.8" r="0.5" fill="white" opacity="0.7"/>
+    <line x1="10" y1="10.5" x2="14" y2="10.2" stroke="#5a3420" stroke-width="0.8" stroke-linecap="round"/>
+    <line x1="16" y1="10.2" x2="20" y2="10.5" stroke="#5a3420" stroke-width="0.8" stroke-linecap="round"/>
+    <path d="M14,16.5 Q16,18 18,16.5" fill="none" stroke="#a06050" stroke-width="0.7" stroke-linecap="round"/>
+    <circle cx="15" cy="15" r="0.6" fill="#e0b8a0"/>
+  </g>
+
+  <!-- ===== Dir 2 (up-left, back) upper body ===== -->
+  <g id="u2">
+    <rect x="9" y="21" width="14" height="11" rx="3" fill="url(#tshirt)"/>
+    <rect x="8" y="20" width="5" height="12" rx="2" fill="url(#vest)"/>
+    <rect x="19" y="20" width="5" height="12" rx="2" fill="url(#vest)"/>
+    <rect x="12" y="21" width="4" height="9" rx="2" fill="#fce4d4"/>
+    <circle cx="14" cy="31" r="2" fill="#fce4d4"/>
+    <circle cx="16" cy="13" r="9" fill="#fce4d4"/>
+    <!-- Full back hair -->
+    <ellipse cx="16" cy="11" rx="10" ry="9" fill="#6b3e26"/>
+    <circle cx="10" cy="7" r="3.5" fill="#6b3e26"/>
+    <circle cx="22" cy="7" r="3.5" fill="#6b3e26"/>
+    <circle cx="16" cy="4" r="3.5" fill="#7a4a30"/>
+    <ellipse cx="16" cy="6" rx="5" ry="2" fill="#9b6840" opacity="0.4"/>
+  </g>
+
+  <!-- ===== Dir 3 (up-right, back) upper body ===== -->
+  <g id="u3">
+    <rect x="9" y="21" width="14" height="11" rx="3" fill="url(#tshirt)"/>
+    <rect x="8" y="20" width="5" height="12" rx="2" fill="url(#vest)"/>
+    <rect x="19" y="20" width="5" height="12" rx="2" fill="url(#vest)"/>
+    <rect x="16" y="21" width="4" height="9" rx="2" fill="#fce4d4"/>
+    <circle cx="18" cy="31" r="2" fill="#fce4d4"/>
+    <circle cx="16" cy="13" r="9" fill="#fce4d4"/>
+    <ellipse cx="16" cy="11" rx="10" ry="9" fill="#6b3e26"/>
+    <circle cx="10" cy="7" r="3.5" fill="#6b3e26"/>
+    <circle cx="22" cy="7" r="3.5" fill="#6b3e26"/>
+    <circle cx="16" cy="4" r="3.5" fill="#7a4a30"/>
+    <ellipse cx="16" cy="6" rx="5" ry="2" fill="#9b6840" opacity="0.4"/>
+  </g>
+
+  <!-- Legs neutral — cargo shorts + sneakers -->
+  <g id="ln">
+    <rect x="11" y="32" width="4" height="6" rx="1" fill="#6a8a5a"/>
+    <rect x="17" y="32" width="4" height="6" rx="1" fill="#6a8a5a"/>
+    <rect x="10" y="38" width="5" height="4" rx="2" fill="white"/>
+    <rect x="17" y="38" width="5" height="4" rx="2" fill="white"/>
+    <line x1="11" y1="39.5" x2="14.5" y2="39.5" stroke="#ddd" stroke-width="0.4"/>
+    <line x1="18" y1="39.5" x2="21.5" y2="39.5" stroke="#ddd" stroke-width="0.4"/>
+  </g>
+  <!-- Legs stride right -->
+  <g id="lr">
+    <rect x="11" y="32" width="4" height="9" rx="1" fill="#6a8a5a"/>
+    <rect x="17" y="32" width="4" height="3" rx="1" fill="#6a8a5a"/>
+    <rect x="10" y="41" width="5" height="4" rx="2" fill="white"/>
+    <rect x="17" y="35" width="5" height="4" rx="2" fill="white"/>
+  </g>
+  <!-- Legs stride left -->
+  <g id="ll">
+    <rect x="11" y="32" width="4" height="3" rx="1" fill="#6a8a5a"/>
+    <rect x="17" y="32" width="4" height="9" rx="1" fill="#6a8a5a"/>
+    <rect x="10" y="35" width="5" height="4" rx="2" fill="white"/>
+    <rect x="17" y="41" width="5" height="4" rx="2" fill="white"/>
+  </g>
+</defs>
+
+<!-- Dir 0 row -->
+<g transform="translate(0,0)"><use href="#sh"/><use href="#u0"/><use href="#ln"/></g>
+<g transform="translate(32,0)"><use href="#sh"/><g transform="translate(0,-1)"><use href="#u0"/><use href="#lr"/></g></g>
+<g transform="translate(64,0)"><use href="#sh"/><use href="#u0"/><use href="#ln"/></g>
+<g transform="translate(96,0)"><use href="#sh"/><g transform="translate(0,-1)"><use href="#u0"/><use href="#ll"/></g></g>
+
+<!-- Dir 1 row -->
+<g transform="translate(0,48)"><use href="#sh"/><use href="#u1"/><use href="#ln"/></g>
+<g transform="translate(32,48)"><use href="#sh"/><g transform="translate(0,-1)"><use href="#u1"/><use href="#lr"/></g></g>
+<g transform="translate(64,48)"><use href="#sh"/><use href="#u1"/><use href="#ln"/></g>
+<g transform="translate(96,48)"><use href="#sh"/><g transform="translate(0,-1)"><use href="#u1"/><use href="#ll"/></g></g>
+
+<!-- Dir 2 row -->
+<g transform="translate(0,96)"><use href="#sh"/><use href="#u2"/><use href="#ln"/></g>
+<g transform="translate(32,96)"><use href="#sh"/><g transform="translate(0,-1)"><use href="#u2"/><use href="#lr"/></g></g>
+<g transform="translate(64,96)"><use href="#sh"/><use href="#u2"/><use href="#ln"/></g>
+<g transform="translate(96,96)"><use href="#sh"/><g transform="translate(0,-1)"><use href="#u2"/><use href="#ll"/></g></g>
+
+<!-- Dir 3 row -->
+<g transform="translate(0,144)"><use href="#sh"/><use href="#u3"/><use href="#ln"/></g>
+<g transform="translate(32,144)"><use href="#sh"/><g transform="translate(0,-1)"><use href="#u3"/><use href="#lr"/></g></g>
+<g transform="translate(64,144)"><use href="#sh"/><use href="#u3"/><use href="#ln"/></g>
+<g transform="translate(96,144)"><use href="#sh"/><g transform="translate(0,-1)"><use href="#u3"/><use href="#ll"/></g></g>
+</svg>
