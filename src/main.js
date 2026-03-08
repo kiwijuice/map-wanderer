@@ -11,7 +11,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 // ── Generate assets ──
-const tileTextures = generateTileTextures();
+let tileTextures;
 const map = generateMap();
 
 // ── Character selection ──
@@ -178,6 +178,7 @@ function buildMiniMap() {
     18: '#c8b090',
     19: '#e8d5b7',
     20: '#5aa',
+    21: '#4ab8d0',
   };
 
   for (let r = 0; r < MAP_ROWS; r++) {
@@ -341,4 +342,9 @@ function selectionLoop() {
   drawCharacterSelect();
   requestAnimationFrame(selectionLoop);
 }
-requestAnimationFrame(selectionLoop);
+
+// ── Boot: load async assets, then start ──
+generateTileTextures().then((tex) => {
+  tileTextures = tex;
+  requestAnimationFrame(selectionLoop);
+});

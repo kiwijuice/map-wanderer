@@ -92,13 +92,13 @@ export function generateMap() {
     fillRect(15, 18, 18, 23, T.BUILDING_BROWN);
 
     // Block 2: commercial district
-    fillRect(11, 28, 14, 32, T.BUILDING_TALL);
+    fillRect(11, 28, 14, 32, T.BUILDING_OFFICE);
     fillRect(11, 34, 14, 38, T.BUILDING_GRAY);
     fillRect(16, 28, 19, 31, T.BUILDING_SHOP);
     fillRect(16, 33, 19, 38, T.BUILDING_BLUE);
 
     // Block 3: downtown
-    fillRect(11, 43, 15, 48, T.BUILDING_TALL);
+    fillRect(11, 43, 15, 48, T.BUILDING_OFFICE);
     fillRect(11, 50, 15, 53, T.BUILDING_TALL);
     fillRect(17, 43, 19, 47, T.BUILDING_SHOP);
     fillRect(17, 49, 19, 53, T.BUILDING_GRAY);
@@ -119,9 +119,9 @@ export function generateMap() {
 
     // Block 6: commercial south
     fillRect(23, 28, 26, 33, T.BUILDING_SHOP);
-    fillRect(23, 35, 26, 38, T.BUILDING_TALL);
+    fillRect(23, 35, 26, 38, T.BUILDING_OFFICE);
     fillRect(28, 28, 33, 32, T.BUILDING_GRAY);
-    fillRect(28, 34, 33, 38, T.BUILDING_TALL);
+    fillRect(28, 34, 33, 38, T.BUILDING_OFFICE);
 
     // Block 7: plaza & shops with landmark
     fillRect(23, 43, 33, 53, T.PLAZA);
@@ -190,7 +190,7 @@ export function generateMap() {
     // ── Top area: some scattered structures ──
     fillRect(1, 13, 5, 17, T.BUILDING_RED);
     fillRect(1, 19, 5, 23, T.BUILDING_BLUE);
-    fillRect(1, 28, 5, 33, T.BUILDING_TALL);
+    fillRect(1, 28, 5, 33, T.BUILDING_OFFICE);
     fillRect(1, 35, 6, 38, T.BUILDING_SHOP);
     fillRect(1, 43, 6, 48, T.BUILDING_GRAY);
     fillRect(1, 50, 6, 53, T.BUILDING_BROWN);
