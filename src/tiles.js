@@ -23,6 +23,7 @@ export const TILE = {
     LANDMARK: 20,
     BUILDING_OFFICE: 21,
     BUILDING_MODERN: 22,
+    OCCUPIED: 23,
 };
 
 // Which tiles block the player
@@ -39,6 +40,7 @@ export const SOLID_TILES = new Set([
     TILE.LANDMARK,
     TILE.BUILDING_OFFICE,
     TILE.BUILDING_MODERN,
+    TILE.OCCUPIED,
 ]);
 
 // Isometric tile dimensions
@@ -59,6 +61,11 @@ export const TILE_HEIGHT = {
     [TILE.LANDMARK]: 90,
     [TILE.BUILDING_OFFICE]: 110,
     [TILE.BUILDING_MODERN]: 120,
+};
+
+// Multi-tile building footprints (anchor is at bottom-right corner)
+export const TILE_FOOTPRINT = {
+    [TILE.BUILDING_MODERN]: { cols: 2, rows: 2 },
 };
 
 // Convert map (col, row) to isometric screen (x, y)

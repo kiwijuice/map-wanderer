@@ -90,7 +90,7 @@ The function should return: `{ canvas, offsetY, extraW }`
 
 ## Adding a New Building to the Game
 
-There are two approaches: **inline** (SVG generated in code) or **file-based** (SVG file in the assets directory).
+There are two approaches: **inline** (SVG generated in code) or **file-based** (SVG file in the assets directory). Buildings can span **1×1 or multiple tiles** (e.g., 2×2).
 
 ### Option A: File-based SVG (recommended)
 
@@ -100,13 +100,13 @@ This loads an SVG from `public/assets/buildings/`. The directory layout:
 public/
   assets/
     buildings/
-      modern-tower.svg    ← sample building
+      modern-tower.svg    ← sample 2×2 building
       my-building.svg     ← add your files here
 ```
 
 #### 1. Create the SVG file
 
-Save your SVG to `public/assets/buildings/my-building.svg`. See the **SVG spec** section above for dimensions and geometry. A working example is included at `public/assets/buildings/modern-tower.svg`.
+Save your SVG to `public/assets/buildings/my-building.svg`. See the **SVG spec** section above for dimensions and geometry. A working 2×2 example is included at `public/assets/buildings/modern-tower.svg`.
 
 #### 2. Register the tile type
 
@@ -114,7 +114,7 @@ In `src/tiles.js`:
 
 ```js
 // Add to the TILE enum (use the next available ID)
-BUILDING_MYTYPE: 23,
+BUILDING_MYTYPE: 24,
 
 // Add to SOLID_TILES if it blocks the player
 TILE.BUILDING_MYTYPE,
@@ -128,22 +128,33 @@ TILE.BUILDING_MYTYPE,
 In `src/assets.js`, inside `generateTileTextures()`, before the return:
 
 ```js
+// 1×1 building
 textures[TILE.BUILDING_MYTYPE] = await loadSvgTile(
     '/assets/buildings/my-building.svg',
-    100, // offsetY = height + top padding in the SVG
+    100, // offsetY
     36   // extraW (0 if SVG width == TILE_W)
 );
-```
 
-The `loadSvgTile(url, offsetY, extraW)` function handles fetching, rasterizing to canvas, and returning the `{ canvas, offsetY, extraW }` object.
+// Multi-tile building (e.g., 2×2) — pass a footprint object as the 4th arg
+textures[TILE.BUILDING_MYTYPE] = await loadSvgTile(
+    '/assets/buildings/my-building.svg',
+    156, // offsetY
+    0,   // extraW (0 when canvas width = cols * TILE_W)
+    { cols: 2, rows: 2 }
+);
+```
 
 #### 4. Place it on the map
 
 In `src/map.js`:
 
 ```js
-// fillRect(startRow, startCol, endRow, endCol, tileType)
+// 1×1 building — use fillRect
 fillRect(11, 28, 14, 32, T.BUILDING_MYTYPE);
+
+// Multi-tile building — use placeBuilding(row, col, rows, cols, tile)
+// Places anchor at bottom-right, OCCUPIED tiles elsewhere
+placeBuilding(26, 49, 2, 2, T.BUILDING_MYTYPE);
 ```
 
 #### 5. Add a minimap color
@@ -151,12 +162,42 @@ fillRect(11, 28, 14, 32, T.BUILDING_MYTYPE);
 In `src/main.js`, add to `tileColors` in `buildMiniMap()`:
 
 ```js
-23: '#yourColor',
+24: '#yourColor',
 ```
 
 ### Option B: Inline SVG (generated in code)
 
 In `src/assets.js`, add a function that builds an SVG template string, converts it to a blob URL, loads it into an Image, draws it onto a canvas, and returns `{ canvas, offsetY, extraW }`. See `makeOfficeTile()` for a full example. Then register and place the tile the same way as Option A (steps 2, 4, 5).
+
+### Multi-tile buildings
+
+Buildings can span more than one tile. The system works like this:
+
+1. **`TILE_FOOTPRINT`** in `src/tiles.js` maps tile IDs to `{ cols, rows }`:
+   ```js
+   export const TILE_FOOTPRINT = {
+       [TILE.BUILDING_MODERN]: { cols: 2, rows: 2 },
+   };
+   ```
+
+2. **`placeBuilding(row, col, rows, cols, tile)`** in `src/map.js` fills the footprint area with `TILE.OCCUPIED` (solid, invisible) and places the actual tile ID at the **bottom-right corner** (the anchor). This is required for correct isometric depth sorting.
+
+3. **SVG dimensions** for an N×M building:
+   - Width: `cols × TILE_W` (+ `extraW` if needed)
+   - Height: `rows × TILE_H + buildingHeight + topPadding`
+   - Ground diamond: `footHW = cols × 32`, `footHH = rows × 16`
+
+4. **Face geometry** for multi-tile buildings:
+   ```
+   cx = canvasWidth / 2
+   cy_ground = canvasHeight - rows × HH
+
+   Left face:   (cx-footHW, cy) → (cx, cy+footHH) → (cx, cy+footHH-h) → (cx-footHW, cy-h)
+   Right face:  (cx+footHW, cy) → (cx, cy+footHH) → (cx, cy+footHH-h) → (cx+footHW, cy-h)
+   Top face:    (cx, cy-footHH-h) → (cx+footHW, cy-h) → (cx, cy+footHH-h) → (cx-footHW, cy-h)
+   ```
+
+5. The **renderer** automatically handles positioning using the canvas dimensions and footprint.
 
 ```js
 const myH = TILE_HEIGHT[TILE.BUILDING_MYTYPE];

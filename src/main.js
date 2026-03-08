@@ -180,6 +180,7 @@ function buildMiniMap() {
     20: '#5aa',
     21: '#4ab8d0',
     22: '#3a90b0',
+    23: '#888',
   };
 
   for (let r = 0; r < MAP_ROWS; r++) {
@@ -321,9 +322,10 @@ function gameLoop(now) {
       if (!tex || !tex.offsetY) continue; // only tiles with height
 
       const screen = toScreen(col, row);
-      const extraW = tex.extraW || 0;
-      const drawX = screen.x - camera.x - (TILE_W + extraW) / 2;
-      const drawY = screen.y - camera.y - TILE_H / 2 - tex.offsetY;
+      const fp = tex.footprint;
+      const fcd = fp ? (fp.cols - fp.rows) * (TILE_H / 2) : 0;
+      const drawX = screen.x - camera.x - fcd - tex.canvas.width / 2;
+      const drawY = screen.y - camera.y + TILE_H / 2 - tex.canvas.height;
       ctx.drawImage(tex.canvas, drawX, drawY);
     }
   }

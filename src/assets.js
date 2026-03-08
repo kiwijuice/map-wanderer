@@ -334,8 +334,9 @@ export async function generateTileTextures() {
     // File-based SVG building (loaded from public/assets/buildings/)
     textures[TILE.BUILDING_MODERN] = await loadSvgTile(
         '/assets/buildings/modern-tower.svg',
-        TILE_HEIGHT[TILE.BUILDING_MODERN] + 22, // offsetY = h + top padding
-        36 // extraW
+        156, // offsetY (canvasH - footprint rows * TILE_H)
+        0,   // extraW (canvas is exactly footprint width)
+        { cols: 2, rows: 2 }
     );
 
     return textures;
@@ -667,7 +668,7 @@ function makeOfficeTile(h) {
 }
 
 // ── Load an SVG tile from a file URL (public/assets/buildings/) ──
-function loadSvgTile(url, offsetY, extraW = 0) {
+function loadSvgTile(url, offsetY, extraW = 0, footprint = null) {
     return new Promise((resolve, reject) => {
         const img = new Image();
         img.onload = () => {
@@ -676,7 +677,9 @@ function loadSvgTile(url, offsetY, extraW = 0) {
             c.height = img.naturalHeight;
             const ctx = c.getContext('2d');
             ctx.drawImage(img, 0, 0);
-            resolve({ canvas: c, offsetY, extraW });
+            const result = { canvas: c, offsetY, extraW };
+            if (footprint) result.footprint = footprint;
+            resolve(result);
         };
         img.onerror = () => reject(new Error(`Failed to load SVG: ${url}`));
         img.src = url;

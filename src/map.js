@@ -40,6 +40,13 @@ export function generateMap() {
             if (map[r][c2] === T.GRASS) map[r][c2] = T.SIDEWALK;
         }
     }
+    // Place a multi-tile building: anchor at bottom-right, OCCUPIED elsewhere
+    function placeBuilding(r1, c1, rows, cols, tile) {
+        for (let r = r1; r < r1 + rows; r++)
+            for (let c = c1; c < c1 + cols; c++)
+                map[r][c] = T.OCCUPIED;
+        map[r1 + rows - 1][c1 + cols - 1] = tile; // anchor
+    }
 
     // ── Major horizontal roads ──
     hRoad(8, 0, MAP_COLS - 1);
@@ -132,11 +139,8 @@ export function generateMap() {
     map[28][49] = T.LANDMARK;
     map[29][48] = T.LANDMARK;
     map[29][49] = T.LANDMARK;
-    // Modern tower (file-based SVG) in the plaza
-    map[26][49] = T.BUILDING_MODERN;
-    map[26][50] = T.BUILDING_MODERN;
-    map[27][49] = T.BUILDING_MODERN;
-    map[27][50] = T.BUILDING_MODERN;
+    // Modern tower (file-based SVG, 2x2 multi-tile building) in the plaza
+    placeBuilding(26, 49, 2, 2, T.BUILDING_MODERN);
     fillRect(30, 45, 32, 48, T.BUILDING_SHOP);
     fillRect(30, 50, 32, 52, T.BUILDING_SHOP);
     // Fountain area in center
