@@ -17,8 +17,7 @@ const map = generateMap();
 // ── Character selection ──
 let gameStarted = false;
 let player, camera;
-const previewMan = generatePlayerSprites('man');
-const previewWoman = generatePlayerSprites('woman');
+let previewMan, previewWoman;
 
 function drawCharacterSelect() {
   ctx.fillStyle = '#1a1a2e';
@@ -126,13 +125,13 @@ function handleSelectMove(e) {
 canvas.addEventListener('click', handleSelectClick);
 canvas.addEventListener('mousemove', handleSelectMove);
 
-function startGame(charType) {
+async function startGame(charType) {
   gameStarted = true;
   canvas.style.cursor = 'none';
   canvas.removeEventListener('click', handleSelectClick);
   canvas.removeEventListener('mousemove', handleSelectMove);
 
-  const playerSprites = generatePlayerSprites(charType);
+  const playerSprites = await generatePlayerSprites(charType);
   player = new Player(PLAYER_START.col, PLAYER_START.row, playerSprites);
   camera = new Camera(canvas.width, canvas.height);
   lastTime = performance.now();
@@ -347,7 +346,13 @@ function selectionLoop() {
 }
 
 // ── Boot: load async assets, then start ──
-generateTileTextures().then((tex) => {
+Promise.all([
+  generateTileTextures(),
+  generatePlayerSprites('man'),
+  generatePlayerSprites('woman'),
+]).then(([tex, manSprites, womanSprites]) => {
   tileTextures = tex;
+  previewMan = manSprites;
+  previewWoman = womanSprites;
   requestAnimationFrame(selectionLoop);
 });
