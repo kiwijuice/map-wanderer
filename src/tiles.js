@@ -35,4 +35,35 @@ export const SOLID_TILES = new Set([
     TILE.TREE,
 ]);
 
-export const TILE_SIZE = 48;
+// Isometric tile dimensions
+export const TILE_W = 64;   // width of diamond
+export const TILE_H = 32;   // height of diamond
+export const TILE_SIZE = 32; // logical grid size for movement/collision
+
+// Heights for raised tiles (in pixels above ground)
+export const TILE_HEIGHT = {
+    [TILE.BUILDING_RED]: 40,
+    [TILE.BUILDING_BLUE]: 40,
+    [TILE.BUILDING_GRAY]: 40,
+    [TILE.BUILDING_BROWN]: 40,
+    [TILE.BUILDING_TALL]: 64,
+    [TILE.BUILDING_SHOP]: 32,
+    [TILE.TREE]: 36,
+    [TILE.FENCE]: 16,
+};
+
+// Convert map (col, row) to isometric screen (x, y)
+export function toScreen(col, row) {
+    return {
+        x: (col - row) * (TILE_W / 2),
+        y: (col + row) * (TILE_H / 2),
+    };
+}
+
+// Convert screen (x, y) to map (col, row) — fractional
+export function toMap(sx, sy) {
+    return {
+        col: (sx / (TILE_W / 2) + sy / (TILE_H / 2)) / 2,
+        row: (sy / (TILE_H / 2) - sx / (TILE_W / 2)) / 2,
+    };
+}

@@ -1,4 +1,4 @@
-import { TILE_SIZE } from './tiles.js';
+import { TILE_W, TILE_H, toScreen } from './tiles.js';
 import { MAP_COLS, MAP_ROWS } from './map.js';
 
 export class Camera {
@@ -9,16 +9,25 @@ export class Camera {
         this.viewH = viewH;
     }
 
-    follow(targetX, targetY) {
-        // Center on target
-        this.x = targetX - this.viewW / 2;
-        this.y = targetY - this.viewH / 2;
+    follow(screenX, screenY) {
+        // Center on target screen position
+        this.x = screenX - this.viewW / 2;
+        this.y = screenY - this.viewH / 2;
 
-        // Clamp to map edges
-        const maxX = MAP_COLS * TILE_SIZE - this.viewW;
-        const maxY = MAP_ROWS * TILE_SIZE - this.viewH;
-        this.x = Math.max(0, Math.min(maxX, this.x));
-        this.y = Math.max(0, Math.min(maxY, this.y));
+        // Calculate isometric map bounds
+        // The four corners of the map in screen space
+        const topCorner = toScreen(0, 0);            // top
+        const rightCorner = toScreen(MAP_COLS, 0);    // right
+        const bottomCorner = toScreen(MAP_COLS, MAP_ROWS); // bottom
+        const leftCorner = toScreen(0, MAP_ROWS);     // left
+
+        const minX = leftCorner.x - TILE_W;
+        const maxX = rightCorner.x + TILE_W - this.viewW;
+        const minY = topCorner.y - TILE_H;
+        const maxY = bottomCorner.y + TILE_H - this.viewH;
+
+        this.x = Math.max(minX, Math.min(maxX, this.x));
+        this.y = Math.max(minY, Math.min(maxY, this.y));
     }
 
     resize(viewW, viewH) {
@@ -26,12 +35,15 @@ export class Camera {
         this.viewH = viewH;
     }
 
-    // Get visible tile range
+    // Determine which tile range is potentially visible
     getVisibleRange() {
-        const startCol = Math.floor(this.x / TILE_SIZE);
-        const startRow = Math.floor(this.y / TILE_SIZE);
-        const endCol = Math.min(MAP_COLS - 1, Math.ceil((this.x + this.viewW) / TILE_SIZE));
-        const endRow = Math.min(MAP_ROWS - 1, Math.ceil((this.y + this.viewH) / TILE_SIZE));
-        return { startCol, startRow, endCol, endRow };
+        // Be generous with the range to avoid popping
+        const pad = 4;
+        return {
+            startCol: 0 - pad,
+            startRow: 0 - pad,
+            endCol: MAP_COLS + pad,
+            endRow: MAP_ROWS + pad,
+        };
     }
 }

@@ -1,36 +1,47 @@
-import { TILE_SIZE, SOLID_TILES } from './tiles.js';
+import { TILE_SIZE, TILE_W, TILE_H, SOLID_TILES, toScreen } from './tiles.js';
 import { MAP_COLS, MAP_ROWS } from './map.js';
 
 export class Player {
     constructor(col, row, sprites) {
-        // Position in pixels
+        // Position in map-space pixels (col/row * TILE_SIZE)
         this.x = col * TILE_SIZE + TILE_SIZE / 2;
         this.y = row * TILE_SIZE + TILE_SIZE / 2;
-        this.speed = 180; // pixels per second
+        this.speed = 120; // pixels per second in map space
         this.sprites = sprites;
 
-        // Direction: 0=down, 1=left, 2=right, 3=up
+        // Direction: 0=down-right, 1=down-left, 2=up-left, 3=up-right (isometric)
         this.dir = 0;
         this.frame = 0;
         this.animTimer = 0;
-        this.animSpeed = 0.15; // seconds per frame
+        this.animSpeed = 0.15;
         this.moving = false;
 
-        // Collision box (relative to center)
-        this.hw = 8;  // half-width
-        this.hh = 8;  // half-height (feet area)
+        // Collision box (relative to center, in map space)
+        this.hw = 6;
+        this.hh = 6;
     }
 
     update(dt, keys, map) {
         let dx = 0;
         let dy = 0;
 
-        if (keys['ArrowLeft'] || keys['KeyA']) { dx -= 1; this.dir = 1; }
-        if (keys['ArrowRight'] || keys['KeyD']) { dx += 1; this.dir = 2; }
-        if (keys['ArrowUp'] || keys['KeyW']) { dy -= 1; this.dir = 3; }
-        if (keys['ArrowDown'] || keys['KeyS']) { dy += 1; this.dir = 0; }
+        // Arrow keys map to isometric directions
+        // Right arrow = move +col (down-right in iso)
+        // Left arrow = move -col (up-left in iso)
+        // Down arrow = move +row (down-left in iso)
+        // Up arrow = move -row (up-right in iso)
+        if (keys['ArrowRight'] || keys['KeyD']) { dx += 1; }
+        if (keys['ArrowLeft'] || keys['KeyA']) { dx -= 1; }
+        if (keys['ArrowDown'] || keys['KeyS']) { dy += 1; }
+        if (keys['ArrowUp'] || keys['KeyW']) { dy -= 1; }
 
         this.moving = dx !== 0 || dy !== 0;
+
+        // Determine facing direction
+        if (dx > 0 && dy >= 0) this.dir = 0;   // down-right
+        else if (dx <= 0 && dy > 0) this.dir = 1;   // down-left
+        else if (dx < 0 && dy <= 0) this.dir = 2;   // up-left
+        else if (dx >= 0 && dy < 0) this.dir = 3;   // up-right
 
         // Normalize diagonal
         if (dx !== 0 && dy !== 0) {
@@ -42,13 +53,13 @@ export class Player {
         const moveX = dx * this.speed * dt;
         const moveY = dy * this.speed * dt;
 
-        // Try X movement
+        // Try X movement (col direction)
         const newX = this.x + moveX;
         if (!this.collides(newX, this.y, map)) {
             this.x = newX;
         }
 
-        // Try Y movement
+        // Try Y movement (row direction)
         const newY = this.y + moveY;
         if (!this.collides(this.x, newY, map)) {
             this.y = newY;
@@ -72,7 +83,6 @@ export class Player {
     }
 
     collides(px, py, map) {
-        // Check all 4 corners of the collision box
         const corners = [
             { x: px - this.hw, y: py - this.hh },
             { x: px + this.hw, y: py - this.hh },
@@ -85,7 +95,7 @@ export class Player {
             const row = Math.floor(corner.y / TILE_SIZE);
 
             if (col < 0 || col >= MAP_COLS || row < 0 || row >= MAP_ROWS) {
-                return true; // Out of bounds
+                return true;
             }
 
             if (SOLID_TILES.has(map[row][col])) {
@@ -96,11 +106,19 @@ export class Player {
         return false;
     }
 
+    // Get screen position for isometric rendering
+    getScreenPos() {
+        const col = this.x / TILE_SIZE;
+        const row = this.y / TILE_SIZE;
+        return toScreen(col, row);
+    }
+
     draw(ctx, camX, camY) {
+        const screen = this.getScreenPos();
         const sx = this.frame * this.sprites.frameW;
         const sy = this.dir * this.sprites.frameH;
-        const drawX = this.x - camX - this.sprites.frameW / 2;
-        const drawY = this.y - camY - this.sprites.frameH + this.hh + 4;
+        const drawX = screen.x - camX - this.sprites.frameW / 2;
+        const drawY = screen.y - camY - this.sprites.frameH + 8;
 
         ctx.drawImage(
             this.sprites.canvas,
@@ -108,4 +126,8 @@ export class Player {
             drawX, drawY, this.sprites.frameW, this.sprites.frameH
         );
     }
+
+    // Map row/col for sorting
+    getMapRow() { return this.y / TILE_SIZE; }
+    getMapCol() { return this.x / TILE_SIZE; }
 }
