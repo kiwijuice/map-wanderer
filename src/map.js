@@ -109,6 +109,8 @@ export function generateMap() {
     fillRect(11, 50, 15, 53, T.BUILDING_TALL);
     fillRect(17, 43, 19, 47, T.BUILDING_SHOP);
     fillRect(17, 49, 19, 53, T.BUILDING_GRAY);
+    // Skyscraper in downtown
+    placeBuilding(12, 51, 2, 2, T.BUILDING_SKYSCRAPER);
 
     // Block 4: park area
     fillRect(11, 58, 19, 68, T.PARK);
@@ -123,6 +125,15 @@ export function generateMap() {
     fillRect(23, 19, 26, 23, T.BUILDING_RED);
     fillRect(28, 13, 32, 16, T.BUILDING_BLUE);
     fillRect(28, 18, 32, 23, T.BUILDING_RED);
+    // Beautiful houses in residential south
+    map[24][14] = T.BUILDING_HOUSE_A;
+    map[24][16] = T.BUILDING_HOUSE_B;
+    map[25][14] = T.BUILDING_HOUSE_C;
+    map[25][16] = T.BUILDING_HOUSE_A;
+    map[24][20] = T.BUILDING_HOUSE_B;
+    map[24][22] = T.BUILDING_HOUSE_C;
+    map[25][20] = T.BUILDING_HOUSE_A;
+    map[25][22] = T.BUILDING_HOUSE_B;
 
     // Block 6: commercial south
     fillRect(23, 28, 26, 33, T.BUILDING_SHOP);
@@ -187,6 +198,14 @@ export function generateMap() {
     fillRect(37, 65, 40, 68, T.BUILDING_BLUE);
     fillRect(42, 58, 47, 62, T.BUILDING_RED);
     fillRect(42, 64, 47, 68, T.BUILDING_GRAY);
+    // Houses in block 12
+    map[38][59] = T.BUILDING_HOUSE_C;
+    map[38][61] = T.BUILDING_HOUSE_A;
+    map[38][66] = T.BUILDING_HOUSE_B;
+    map[43][59] = T.BUILDING_HOUSE_B;
+    map[43][61] = T.BUILDING_HOUSE_C;
+    map[43][65] = T.BUILDING_HOUSE_A;
+    map[43][67] = T.BUILDING_HOUSE_C;
 
     // ── Far right blocks ──
     fillRect(11, 73, 15, 78, T.BUILDING_GRAY);
@@ -202,11 +221,22 @@ export function generateMap() {
     fillRect(1, 28, 5, 33, T.BUILDING_OFFICE);
     fillRect(1, 35, 6, 38, T.BUILDING_SHOP);
     fillRect(1, 43, 6, 48, T.BUILDING_GRAY);
+    // City Hall in top area
+    placeBuilding(2, 44, 2, 2, T.BUILDING_CITYHALL);
     fillRect(1, 50, 6, 53, T.BUILDING_BROWN);
     fillRect(1, 58, 6, 68, T.PARK);
     map[3][60] = T.TREE; map[3][63] = T.TREE; map[3][66] = T.TREE;
     map[5][59] = T.TREE; map[5][64] = T.TREE; map[5][67] = T.TREE;
     fillRect(1, 73, 6, 78, T.BUILDING_TALL);
+    // Houses in top-left residential
+    map[2][14] = T.BUILDING_HOUSE_A;
+    map[2][16] = T.BUILDING_HOUSE_C;
+    map[4][14] = T.BUILDING_HOUSE_B;
+    map[4][16] = T.BUILDING_HOUSE_A;
+    map[2][20] = T.BUILDING_HOUSE_B;
+    map[2][22] = T.BUILDING_HOUSE_C;
+    map[4][20] = T.BUILDING_HOUSE_C;
+    map[4][22] = T.BUILDING_HOUSE_B;
 
     // ── Bottom row ──
     fillRect(51, 13, 56, 18, T.BUILDING_SHOP);

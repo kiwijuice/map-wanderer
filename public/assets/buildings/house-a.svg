@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="90" viewBox="0 0 64 90">
+  <defs>
+    <!-- Left wall - warm brick -->
+    <linearGradient id="lw" x1="0" y1="0" x2="1" y2="0.5">
+      <stop offset="0%" stop-color="#c46040"/>
+      <stop offset="100%" stop-color="#a04828"/>
+    </linearGradient>
+    <!-- Right wall - darker brick -->
+    <linearGradient id="rw" x1="1" y1="0" x2="0" y2="0.5">
+      <stop offset="0%" stop-color="#883820"/>
+      <stop offset="100%" stop-color="#6e2c18"/>
+    </linearGradient>
+    <!-- Roof left slope -->
+    <linearGradient id="rl" x1="0" y1="0" x2="0.5" y2="1">
+      <stop offset="0%" stop-color="#8b6040"/>
+      <stop offset="100%" stop-color="#6e4c30"/>
+    </linearGradient>
+    <!-- Roof right slope -->
+    <linearGradient id="rr" x1="1" y1="0" x2="0.5" y2="1">
+      <stop offset="0%" stop-color="#5e3c22"/>
+      <stop offset="100%" stop-color="#4a3018"/>
+    </linearGradient>
+  </defs>
+
+  <!-- LEFT WALL -->
+  <polygon points="0,74 32,90 32,62 0,46" fill="url(#lw)" stroke="#8a4028" stroke-width="0.6"/>
+
+  <!-- Left wall brick lines -->
+  <line x1="0" y1="52" x2="32" y2="68" stroke="#984830" stroke-width="0.3"/>
+  <line x1="0" y1="58" x2="32" y2="74" stroke="#984830" stroke-width="0.3"/>
+  <line x1="0" y1="64" x2="32" y2="80" stroke="#984830" stroke-width="0.3"/>
+  <line x1="0" y1="70" x2="32" y2="86" stroke="#984830" stroke-width="0.3"/>
+
+  <!-- Left wall windows -->
+  <rect x="5" y="56" width="5" height="6" rx="0.5" fill="#ffeebb" stroke="#886030" stroke-width="0.4"/>
+  <rect x="16" y="52" width="5" height="6" rx="0.5" fill="#ffeebb" stroke="#886030" stroke-width="0.4"/>
+  <rect x="5" y="68" width="5" height="6" rx="0.5" fill="#ffe8aa" stroke="#886030" stroke-width="0.4"/>
+  <rect x="16" y="64" width="5" height="6" rx="0.5" fill="#ffe8aa" stroke="#886030" stroke-width="0.4"/>
+
+  <!-- Left wall door -->
+  <rect x="24" y="76" width="6" height="10" rx="0.8" fill="#5a3018" stroke="#402010" stroke-width="0.4"/>
+  <circle cx="29" cy="81" r="0.6" fill="#c8a040"/>
+
+  <!-- RIGHT WALL -->
+  <polygon points="64,74 32,90 32,62 64,46" fill="url(#rw)" stroke="#6a2818" stroke-width="0.6"/>
+
+  <!-- Right wall brick lines -->
+  <line x1="64" y1="52" x2="32" y2="68" stroke="#783020" stroke-width="0.3"/>
+  <line x1="64" y1="58" x2="32" y2="74" stroke="#783020" stroke-width="0.3"/>
+  <line x1="64" y1="64" x2="32" y2="80" stroke="#783020" stroke-width="0.3"/>
+  <line x1="64" y1="70" x2="32" y2="86" stroke="#783020" stroke-width="0.3"/>
+
+  <!-- Right wall windows -->
+  <rect x="42" y="56" width="5" height="6" rx="0.5" fill="#ffe8aa" stroke="#6a2818" stroke-width="0.4"/>
+  <rect x="54" y="52" width="5" height="6" rx="0.5" fill="#ffeebb" stroke="#6a2818" stroke-width="0.4"/>
+  <rect x="42" y="68" width="5" height="6" rx="0.5" fill="#ffeebb" stroke="#6a2818" stroke-width="0.4"/>
+  <rect x="54" y="64" width="5" height="6" rx="0.5" fill="#ffe8aa" stroke="#6a2818" stroke-width="0.4"/>
+
+  <!-- ROOF - pyramid style -->
+  <!-- Back-right slope (mostly hidden) -->
+  <polygon points="64,46 32,30 32,20" fill="#4a3018"/>
+  <!-- Back-left slope (slightly visible) -->
+  <polygon points="32,30 0,46 32,20" fill="#7a5838"/>
+  <!-- Left front slope (visible) -->
+  <polygon points="0,46 32,62 32,20" fill="url(#rl)" stroke="#6a4828" stroke-width="0.5"/>
+  <!-- Right front slope (visible) -->
+  <polygon points="32,62 64,46 32,20" fill="url(#rr)" stroke="#4a3018" stroke-width="0.5"/>
+
+  <!-- Roof ridge highlights -->
+  <line x1="32" y1="20" x2="0" y2="46" stroke="#9a7048" stroke-width="0.6"/>
+  <line x1="32" y1="20" x2="32" y2="62" stroke="#6a4828" stroke-width="0.4"/>
+
+  <!-- Chimney -->
+  <rect x="44" y="26" width="6" height="14" fill="#984830" stroke="#783820" stroke-width="0.4"/>
+  <rect x="43" y="24" width="8" height="3" fill="#a85838" stroke="#884028" stroke-width="0.3"/>
+</svg>

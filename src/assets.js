@@ -339,6 +339,29 @@ export async function generateTileTextures() {
         { cols: 2, rows: 2 }
     );
 
+    // Skyscraper (2×2, 128×260 canvas)
+    textures[TILE.BUILDING_SKYSCRAPER] = await loadSvgTile(
+        '/assets/buildings/skyscraper.svg',
+        196, 0, { cols: 2, rows: 2 }
+    );
+
+    // Houses (1×1, 64×90 canvases)
+    textures[TILE.BUILDING_HOUSE_A] = await loadSvgTile(
+        '/assets/buildings/house-a.svg', 58, 0
+    );
+    textures[TILE.BUILDING_HOUSE_B] = await loadSvgTile(
+        '/assets/buildings/house-b.svg', 58, 0
+    );
+    textures[TILE.BUILDING_HOUSE_C] = await loadSvgTile(
+        '/assets/buildings/house-c.svg', 58, 0
+    );
+
+    // City Hall (2×2, 128×200 canvas)
+    textures[TILE.BUILDING_CITYHALL] = await loadSvgTile(
+        '/assets/buildings/city-hall.svg',
+        136, 0, { cols: 2, rows: 2 }
+    );
+
     return textures;
 }
 

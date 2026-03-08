@@ -1,0 +1,143 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="200" viewBox="0 0 128 200">
+  <defs>
+    <!-- Left face - warm sandstone -->
+    <linearGradient id="lf" x1="0" y1="0" x2="1" y2="0.4">
+      <stop offset="0%" stop-color="#e8d8b8"/>
+      <stop offset="40%" stop-color="#d4c4a0"/>
+      <stop offset="100%" stop-color="#c0b090"/>
+    </linearGradient>
+    <!-- Right face - darker sandstone -->
+    <linearGradient id="rf" x1="1" y1="0" x2="0" y2="0.4">
+      <stop offset="0%" stop-color="#b0a080"/>
+      <stop offset="40%" stop-color="#9c8c70"/>
+      <stop offset="100%" stop-color="#887860"/>
+    </linearGradient>
+    <!-- Roof/top -->
+    <linearGradient id="rg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#668870"/>
+      <stop offset="100%" stop-color="#4a7058"/>
+    </linearGradient>
+    <!-- Dome gradient -->
+    <radialGradient id="dome" cx="50%" cy="40%" r="55%">
+      <stop offset="0%" stop-color="#88c8a8"/>
+      <stop offset="50%" stop-color="#5a9878"/>
+      <stop offset="100%" stop-color="#3a7858"/>
+    </radialGradient>
+    <!-- Window warm glow -->
+    <linearGradient id="wg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffeebb"/>
+      <stop offset="100%" stop-color="#e8cc88"/>
+    </linearGradient>
+    <!-- Pillar gradient -->
+    <linearGradient id="pg" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#f0e0c0"/>
+      <stop offset="50%" stop-color="#e8d8b0"/>
+      <stop offset="100%" stop-color="#d0c098"/>
+    </linearGradient>
+  </defs>
+
+  <!-- LEFT FACE -->
+  <polygon points="0,168 64,200 64,100 0,68" fill="url(#lf)" stroke="#b0a078" stroke-width="0.8"/>
+
+  <!-- Left face floor/cornice lines -->
+  <line x1="0" y1="72" x2="64" y2="104" stroke="#c0a878" stroke-width="0.8"/>
+  <line x1="0" y1="100" x2="64" y2="132" stroke="#c0a878" stroke-width="0.4"/>
+  <line x1="0" y1="130" x2="64" y2="162" stroke="#c0a878" stroke-width="0.4"/>
+  <line x1="0" y1="160" x2="64" y2="192" stroke="#c0a878" stroke-width="0.5"/>
+
+  <!-- Left face pillars -->
+  <rect x="8" y="78" width="3" height="82" fill="url(#pg)" stroke="#c0a880" stroke-width="0.3"/>
+  <rect x="22" y="84" width="3" height="82" fill="url(#pg)" stroke="#c0a880" stroke-width="0.3"/>
+  <rect x="36" y="90" width="3" height="82" fill="url(#pg)" stroke="#c0a880" stroke-width="0.3"/>
+  <rect x="50" y="96" width="3" height="82" fill="url(#pg)" stroke="#c0a880" stroke-width="0.3"/>
+
+  <!-- Left face windows - arched style -->
+  <rect x="12" y="84" width="6" height="10" rx="0.5" fill="url(#wg)" stroke="#a08850" stroke-width="0.4"/>
+  <path d="M12,84 Q15,81 18,84" fill="#d8c898" stroke="#a08850" stroke-width="0.4"/>
+  <rect x="26" y="90" width="6" height="10" rx="0.5" fill="url(#wg)" stroke="#a08850" stroke-width="0.4"/>
+  <path d="M26,90 Q29,87 32,90" fill="#d8c898" stroke="#a08850" stroke-width="0.4"/>
+  <rect x="40" y="96" width="6" height="10" rx="0.5" fill="url(#wg)" stroke="#a08850" stroke-width="0.4"/>
+  <path d="M40,96 Q43,93 46,96" fill="#d8c898" stroke="#a08850" stroke-width="0.4"/>
+  <rect x="54" y="102" width="6" height="10" rx="0.5" fill="url(#wg)" stroke="#a08850" stroke-width="0.4"/>
+  <path d="M54,102 Q57,99 60,102" fill="#d8c898" stroke="#a08850" stroke-width="0.4"/>
+
+  <!-- Left face second row windows -->
+  <rect x="12" y="115" width="6" height="10" rx="0.5" fill="url(#wg)" stroke="#a08850" stroke-width="0.4"/>
+  <rect x="26" y="121" width="6" height="10" rx="0.5" fill="url(#wg)" stroke="#a08850" stroke-width="0.4"/>
+  <rect x="40" y="127" width="6" height="10" rx="0.5" fill="url(#wg)" stroke="#a08850" stroke-width="0.4"/>
+  <rect x="54" y="133" width="6" height="10" rx="0.5" fill="url(#wg)" stroke="#a08850" stroke-width="0.4"/>
+
+  <!-- Left face grand entrance -->
+  <rect x="24" y="170" width="16" height="22" rx="1" fill="#4a3020" stroke="#3a2010" stroke-width="0.6"/>
+  <path d="M24,170 Q32,164 40,170" fill="#6a5040" stroke="#4a3020" stroke-width="0.6"/>
+  <line x1="32" y1="170" x2="32" y2="192" stroke="#5a4030" stroke-width="0.5"/>
+  <!-- Steps -->
+  <polygon points="20,192 44,192 40,196 24,196" fill="#d8c8a8" stroke="#b0a080" stroke-width="0.3"/>
+
+  <!-- RIGHT FACE -->
+  <polygon points="128,168 64,200 64,100 128,68" fill="url(#rf)" stroke="#907858" stroke-width="0.8"/>
+
+  <!-- Right face cornice lines -->
+  <line x1="128" y1="72" x2="64" y2="104" stroke="#988060" stroke-width="0.7"/>
+  <line x1="128" y1="100" x2="64" y2="132" stroke="#988060" stroke-width="0.4"/>
+  <line x1="128" y1="130" x2="64" y2="162" stroke="#988060" stroke-width="0.4"/>
+  <line x1="128" y1="160" x2="64" y2="192" stroke="#988060" stroke-width="0.5"/>
+
+  <!-- Right face pillars -->
+  <rect x="74" y="96" width="3" height="82" fill="#d0c098" stroke="#b09870" stroke-width="0.3"/>
+  <rect x="88" y="90" width="3" height="82" fill="#d0c098" stroke="#b09870" stroke-width="0.3"/>
+  <rect x="102" y="84" width="3" height="82" fill="#d0c098" stroke="#b09870" stroke-width="0.3"/>
+  <rect x="116" y="78" width="3" height="82" fill="#d0c098" stroke="#b09870" stroke-width="0.3"/>
+
+  <!-- Right face windows -->
+  <rect x="78" y="102" width="6" height="10" rx="0.5" fill="url(#wg)" stroke="#887048" stroke-width="0.4"/>
+  <path d="M78,102 Q81,99 84,102" fill="#c0b088" stroke="#887048" stroke-width="0.4"/>
+  <rect x="92" y="96" width="6" height="10" rx="0.5" fill="url(#wg)" stroke="#887048" stroke-width="0.4"/>
+  <path d="M92,96 Q95,93 98,96" fill="#c0b088" stroke="#887048" stroke-width="0.4"/>
+  <rect x="106" y="90" width="6" height="10" rx="0.5" fill="url(#wg)" stroke="#887048" stroke-width="0.4"/>
+  <path d="M106,90 Q109,87 112,90" fill="#c0b088" stroke="#887048" stroke-width="0.4"/>
+
+  <!-- Right face second row windows -->
+  <rect x="78" y="133" width="6" height="10" rx="0.5" fill="url(#wg)" stroke="#887048" stroke-width="0.4"/>
+  <rect x="92" y="127" width="6" height="10" rx="0.5" fill="url(#wg)" stroke="#887048" stroke-width="0.4"/>
+  <rect x="106" y="121" width="6" height="10" rx="0.5" fill="url(#wg)" stroke="#887048" stroke-width="0.4"/>
+
+  <!-- TOP FACE -->
+  <polygon points="64,36 128,68 64,100 0,68" fill="url(#rg)" stroke="#5a7860" stroke-width="0.5"/>
+
+  <!-- Cornice highlight -->
+  <line x1="0" y1="68" x2="64" y2="36" stroke="#d8c8a8" stroke-width="1.5"/>
+  <line x1="64" y1="36" x2="128" y2="68" stroke="#c0b090" stroke-width="1.2"/>
+  <line x1="0" y1="68" x2="64" y2="100" stroke="#c0b090" stroke-width="1"/>
+  <line x1="64" y1="100" x2="128" y2="68" stroke="#b0a078" stroke-width="0.8"/>
+
+  <!-- Dome base -->
+  <ellipse cx="64" cy="68" rx="20" ry="10" fill="#4a7860" stroke="#3a6850" stroke-width="0.5"/>
+
+  <!-- Dome -->
+  <ellipse cx="64" cy="54" rx="16" ry="20" fill="url(#dome)" stroke="#4a8868" stroke-width="0.5"/>
+  <!-- Dome highlight -->
+  <ellipse cx="60" cy="48" rx="6" ry="10" fill="rgba(255,255,255,0.12)"/>
+
+  <!-- Dome ribs -->
+  <line x1="64" y1="34" x2="64" y2="74" stroke="#4a8868" stroke-width="0.4"/>
+  <path d="M54,38 Q64,32 74,38" fill="none" stroke="#4a8868" stroke-width="0.3"/>
+
+  <!-- Cupola / lantern on top of dome -->
+  <rect x="60" y="30" width="8" height="6" fill="#d8c8a0" stroke="#b0a070" stroke-width="0.4"/>
+  <rect x="62" y="31" width="4" height="4" fill="url(#wg)" stroke="#a09060" stroke-width="0.3"/>
+
+  <!-- Spire -->
+  <line x1="64" y1="30" x2="64" y2="14" stroke="#c8a840" stroke-width="1.5" stroke-linecap="round"/>
+  <circle cx="64" cy="13" r="2" fill="#f0c840" stroke="#c8a030" stroke-width="0.5"/>
+
+  <!-- Clock face on left face (just below cornice) -->
+  <circle cx="32" cy="78" r="5" fill="#f0e8d0" stroke="#a08850" stroke-width="0.5"/>
+  <circle cx="32" cy="78" r="3.5" fill="none" stroke="#806840" stroke-width="0.3"/>
+  <line x1="32" y1="78" x2="32" y2="75" stroke="#403020" stroke-width="0.5"/>
+  <line x1="32" y1="78" x2="34" y2="79" stroke="#403020" stroke-width="0.4"/>
+
+  <!-- Flag on right side -->
+  <line x1="110" y1="68" x2="110" y2="56" stroke="#806840" stroke-width="0.8"/>
+  <polygon points="110,56 120,58 110,61" fill="#c83030" stroke="#a02020" stroke-width="0.3"/>
+</svg>
