@@ -21,122 +21,122 @@ const previewMan = generatePlayerSprites('man');
 const previewWoman = generatePlayerSprites('woman');
 
 function drawCharacterSelect() {
-    ctx.fillStyle = '#1a1a2e';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = '#1a1a2e';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Title
-    ctx.fillStyle = '#fff';
-    ctx.font = 'bold 36px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('City Walker', canvas.width / 2, canvas.height / 2 - 140);
+  // Title
+  ctx.fillStyle = '#fff';
+  ctx.font = 'bold 36px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('City Walker', canvas.width / 2, canvas.height / 2 - 140);
 
-    ctx.font = '18px sans-serif';
-    ctx.fillStyle = '#aaa';
-    ctx.fillText('Choose your character', canvas.width / 2, canvas.height / 2 - 100);
+  ctx.font = '18px sans-serif';
+  ctx.fillStyle = '#aaa';
+  ctx.fillText('Choose your character', canvas.width / 2, canvas.height / 2 - 100);
 
-    // Draw two character preview boxes
-    const boxW = 140;
-    const boxH = 180;
-    const gap = 60;
-    const leftX = canvas.width / 2 - boxW - gap / 2;
-    const rightX = canvas.width / 2 + gap / 2;
-    const boxY = canvas.height / 2 - 60;
+  // Draw two character preview boxes
+  const boxW = 140;
+  const boxH = 180;
+  const gap = 60;
+  const leftX = canvas.width / 2 - boxW - gap / 2;
+  const rightX = canvas.width / 2 + gap / 2;
+  const boxY = canvas.height / 2 - 60;
 
-    // Man box
-    drawCharBox(leftX, boxY, boxW, boxH, previewMan, 'Man', manHovered);
-    // Woman box
-    drawCharBox(rightX, boxY, boxW, boxH, previewWoman, 'Woman', womanHovered);
+  // Man box
+  drawCharBox(leftX, boxY, boxW, boxH, previewMan, 'Man', manHovered);
+  // Woman box
+  drawCharBox(rightX, boxY, boxW, boxH, previewWoman, 'Woman', womanHovered);
 
-    ctx.font = '14px sans-serif';
-    ctx.fillStyle = '#666';
-    ctx.fillText('Click to select', canvas.width / 2, boxY + boxH + 40);
+  ctx.font = '14px sans-serif';
+  ctx.fillStyle = '#666';
+  ctx.fillText('Click to select', canvas.width / 2, boxY + boxH + 40);
 }
 
 let manHovered = false;
 let womanHovered = false;
 
 function drawCharBox(x, y, w, h, sprites, label, hovered) {
-    // Box background
-    ctx.fillStyle = hovered ? '#2a2a4e' : '#222240';
-    ctx.strokeStyle = hovered ? '#6af' : '#444';
-    ctx.lineWidth = hovered ? 2 : 1;
-    ctx.beginPath();
-    ctx.roundRect(x, y, w, h, 12);
-    ctx.fill();
-    ctx.stroke();
+  // Box background
+  ctx.fillStyle = hovered ? '#2a2a4e' : '#222240';
+  ctx.strokeStyle = hovered ? '#6af' : '#444';
+  ctx.lineWidth = hovered ? 2 : 1;
+  ctx.beginPath();
+  ctx.roundRect(x, y, w, h, 12);
+  ctx.fill();
+  ctx.stroke();
 
-    // Draw the front-facing idle frame (dir=0, frame=0)
-    const scale = 3;
-    const fw = sprites.frameW;
-    const fh = sprites.frameH;
-    const drawW = fw * scale;
-    const drawH = fh * scale;
-    const sx = 0;
-    const sy = 0;
-    ctx.imageSmoothingEnabled = false;
-    ctx.drawImage(sprites.canvas, sx, sy, fw, fh,
-        x + w / 2 - drawW / 2, y + 20, drawW, drawH);
-    ctx.imageSmoothingEnabled = true;
+  // Draw the front-facing idle frame (dir=0, frame=0)
+  const scale = 3;
+  const fw = sprites.frameW;
+  const fh = sprites.frameH;
+  const drawW = fw * scale;
+  const drawH = fh * scale;
+  const sx = 0;
+  const sy = 0;
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(sprites.canvas, sx, sy, fw, fh,
+    x + w / 2 - drawW / 2, y + 20, drawW, drawH);
+  ctx.imageSmoothingEnabled = true;
 
-    // Label
-    ctx.fillStyle = '#fff';
-    ctx.font = 'bold 16px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText(label, x + w / 2, y + h - 16);
+  // Label
+  ctx.fillStyle = '#fff';
+  ctx.font = 'bold 16px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(label, x + w / 2, y + h - 16);
 }
 
 function handleSelectClick(e) {
-    if (gameStarted) return;
-    const rect = canvas.getBoundingClientRect();
-    const mx = e.clientX - rect.left;
-    const my = e.clientY - rect.top;
+  if (gameStarted) return;
+  const rect = canvas.getBoundingClientRect();
+  const mx = e.clientX - rect.left;
+  const my = e.clientY - rect.top;
 
-    const boxW = 140;
-    const boxH = 180;
-    const gap = 60;
-    const leftX = canvas.width / 2 - boxW - gap / 2;
-    const rightX = canvas.width / 2 + gap / 2;
-    const boxY = canvas.height / 2 - 60;
+  const boxW = 140;
+  const boxH = 180;
+  const gap = 60;
+  const leftX = canvas.width / 2 - boxW - gap / 2;
+  const rightX = canvas.width / 2 + gap / 2;
+  const boxY = canvas.height / 2 - 60;
 
-    if (mx >= leftX && mx <= leftX + boxW && my >= boxY && my <= boxY + boxH) {
-        startGame('man');
-    } else if (mx >= rightX && mx <= rightX + boxW && my >= boxY && my <= boxY + boxH) {
-        startGame('woman');
-    }
+  if (mx >= leftX && mx <= leftX + boxW && my >= boxY && my <= boxY + boxH) {
+    startGame('man');
+  } else if (mx >= rightX && mx <= rightX + boxW && my >= boxY && my <= boxY + boxH) {
+    startGame('woman');
+  }
 }
 
 function handleSelectMove(e) {
-    if (gameStarted) return;
-    const rect = canvas.getBoundingClientRect();
-    const mx = e.clientX - rect.left;
-    const my = e.clientY - rect.top;
+  if (gameStarted) return;
+  const rect = canvas.getBoundingClientRect();
+  const mx = e.clientX - rect.left;
+  const my = e.clientY - rect.top;
 
-    const boxW = 140;
-    const boxH = 180;
-    const gap = 60;
-    const leftX = canvas.width / 2 - boxW - gap / 2;
-    const rightX = canvas.width / 2 + gap / 2;
-    const boxY = canvas.height / 2 - 60;
+  const boxW = 140;
+  const boxH = 180;
+  const gap = 60;
+  const leftX = canvas.width / 2 - boxW - gap / 2;
+  const rightX = canvas.width / 2 + gap / 2;
+  const boxY = canvas.height / 2 - 60;
 
-    manHovered = mx >= leftX && mx <= leftX + boxW && my >= boxY && my <= boxY + boxH;
-    womanHovered = mx >= rightX && mx <= rightX + boxW && my >= boxY && my <= boxY + boxH;
-    canvas.style.cursor = (manHovered || womanHovered) ? 'pointer' : 'default';
+  manHovered = mx >= leftX && mx <= leftX + boxW && my >= boxY && my <= boxY + boxH;
+  womanHovered = mx >= rightX && mx <= rightX + boxW && my >= boxY && my <= boxY + boxH;
+  canvas.style.cursor = (manHovered || womanHovered) ? 'pointer' : 'default';
 }
 
 canvas.addEventListener('click', handleSelectClick);
 canvas.addEventListener('mousemove', handleSelectMove);
 
 function startGame(charType) {
-    gameStarted = true;
-    canvas.style.cursor = 'none';
-    canvas.removeEventListener('click', handleSelectClick);
-    canvas.removeEventListener('mousemove', handleSelectMove);
+  gameStarted = true;
+  canvas.style.cursor = 'none';
+  canvas.removeEventListener('click', handleSelectClick);
+  canvas.removeEventListener('mousemove', handleSelectMove);
 
-    const playerSprites = generatePlayerSprites(charType);
-    player = new Player(PLAYER_START.col, PLAYER_START.row, playerSprites);
-    camera = new Camera(canvas.width, canvas.height);
-    lastTime = performance.now();
-    requestAnimationFrame(gameLoop);
+  const playerSprites = generatePlayerSprites(charType);
+  player = new Player(PLAYER_START.col, PLAYER_START.row, playerSprites);
+  camera = new Camera(canvas.width, canvas.height);
+  lastTime = performance.now();
+  requestAnimationFrame(gameLoop);
 }
 
 function resize() {
@@ -278,46 +278,54 @@ function gameLoop(now) {
   // Get visible range
   const { startCol, endCol, startRow, endRow } = getVisibleTileRange();
 
-  // Player map position for depth sorting
-  const playerDepth = Math.floor(player.getMapRow()) + Math.floor(player.getMapCol());
-  let playerDrawn = false;
-
-  // Render tiles in isometric depth order (back to front)
-  // Depth = row + col; tiles with smaller sum are further from viewer
+  // Two-pass rendering: flat ground tiles first, then elevated tiles + player depth-sorted.
+  // This prevents flat ground diamonds from overlapping the player's legs.
   const minDepth = startRow + startCol;
   const maxDepth = endRow + endCol;
 
+  // Pass 1: Draw all flat ground tiles (no height)
   for (let depth = minDepth; depth <= maxDepth; depth++) {
-    // Draw player at the correct depth layer
+    const colMin = Math.max(startCol, depth - endRow);
+    const colMax = Math.min(endCol, depth - startRow);
+    for (let col = colMin; col <= colMax; col++) {
+      const row = depth - col;
+      if (row < 0 || row >= MAP_ROWS || col < 0 || col >= MAP_COLS) continue;
+      const tileId = map[row][col];
+      const tex = tileTextures[tileId];
+      if (!tex || tex.offsetY) continue; // skip tiles with height
+
+      const screen = toScreen(col, row);
+      ctx.drawImage(tex.canvas, screen.x - camera.x - TILE_W / 2, screen.y - camera.y - TILE_H / 2);
+    }
+  }
+
+  // Pass 2: Draw elevated tiles + player in depth order
+  const playerDepth = player.getMapRow() + player.getMapCol();
+  let playerDrawn = false;
+
+  for (let depth = minDepth; depth <= maxDepth; depth++) {
     if (!playerDrawn && depth > playerDepth) {
       player.draw(ctx, camera.x, camera.y);
       playerDrawn = true;
     }
 
-    // All tiles where row + col = depth
     const colMin = Math.max(startCol, depth - endRow);
     const colMax = Math.min(endCol, depth - startRow);
-
     for (let col = colMin; col <= colMax; col++) {
       const row = depth - col;
       if (row < 0 || row >= MAP_ROWS || col < 0 || col >= MAP_COLS) continue;
-
       const tileId = map[row][col];
       const tex = tileTextures[tileId];
-      if (!tex) continue;
+      if (!tex || !tex.offsetY) continue; // only tiles with height
 
       const screen = toScreen(col, row);
-      const height = tex.offsetY || 0;
       const extraW = tex.extraW || 0;
-
       const drawX = screen.x - camera.x - (TILE_W + extraW) / 2;
-      const drawY = screen.y - camera.y - TILE_H / 2 - height;
-
+      const drawY = screen.y - camera.y - TILE_H / 2 - tex.offsetY;
       ctx.drawImage(tex.canvas, drawX, drawY);
     }
   }
 
-  // Draw player if not drawn yet (in front of everything)
   if (!playerDrawn) {
     player.draw(ctx, camera.x, camera.y);
   }
@@ -329,8 +337,8 @@ function gameLoop(now) {
 
 // ── Character selection loop ──
 function selectionLoop() {
-    if (gameStarted) return;
-    drawCharacterSelect();
-    requestAnimationFrame(selectionLoop);
+  if (gameStarted) return;
+  drawCharacterSelect();
+  requestAnimationFrame(selectionLoop);
 }
 requestAnimationFrame(selectionLoop);
