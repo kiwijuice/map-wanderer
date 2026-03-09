@@ -4,6 +4,7 @@ import { generateMap, PLAYER_START, MAP_COLS, MAP_ROWS } from './map.js';
 import { Player } from './player.js';
 import { Camera } from './camera.js';
 import { createNPCs } from './npc.js';
+import { initLLM, getLLMStatus } from './llm.js';
 
 // ── Canvas setup ──
 const canvas = document.getElementById('game');
@@ -157,6 +158,10 @@ async function startGame(charType) {
   camera = new Camera(canvas.width, canvas.height);
   lastTime = performance.now();
   requestAnimationFrame(gameLoop);
+
+  // Start loading LLM in background (non-blocking)
+  console.log('%c🎮 GAME', 'background:#1a3d1a;color:#8fef8f;padding:2px 6px;border-radius:3px;font-weight:bold', 'Starting LLM engine in background...');
+  initLLM();
 }
 
 function resize() {
@@ -255,6 +260,20 @@ function drawHUD() {
   ctx.fillStyle = '#fff';
   ctx.font = '13px monospace';
   ctx.fillText(`Tile: ${tileCol}, ${tileRow}`, 18, 27);
+
+  // LLM loading status
+  const llmStatus = getLLMStatus();
+  if (llmStatus !== 'ready') {
+    const label = llmStatus === 'failed' ? 'LLM: failed' : `LLM: ${llmStatus}`;
+    ctx.font = '12px monospace';
+    const tw = ctx.measureText(label).width;
+    ctx.globalAlpha = 0.7;
+    ctx.fillStyle = '#000';
+    ctx.fillRect(10, 40, tw + 16, 22);
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = llmStatus === 'failed' ? '#f66' : '#ff0';
+    ctx.fillText(label, 18, 55);
+  }
 }
 
 // ── Determine visible tile range efficiently ──
@@ -368,7 +387,10 @@ function gameLoop(now) {
   // Draw speech bubbles for nearby NPCs (after all sprites so bubbles are on top)
   for (const npc of npcs) {
     if (npc.isPlayerNear(player)) {
+      npc.onPlayerApproach();
       npc.drawBubble(ctx, camera.x, camera.y);
+    } else if (npc.llmRequested) {
+      npc.onPlayerLeave();
     }
   }
 

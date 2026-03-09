@@ -1,6 +1,15 @@
 import { TILE, TILE_SIZE, SOLID_TILES, toScreen } from './tiles.js';
 import { MAP_COLS, MAP_ROWS } from './map.js';
 import { generatePlayerSprites } from './assets.js';
+import { generateGreeting, getLLMStatus } from './llm.js';
+
+// ── Styled logging helpers ──
+const LOG_PREFIX = '%c🧍 NPC';
+const STYLE_INFO = 'background:#3a1e5f;color:#c87ee3;padding:2px 6px;border-radius:3px;font-weight:bold';
+const STYLE_OK = 'background:#1a4d2e;color:#6fcf97;padding:2px 6px;border-radius:3px;font-weight:bold';
+const STYLE_WARN = 'background:#5f3a1e;color:#e3a87e;padding:2px 6px;border-radius:3px;font-weight:bold';
+
+let npcIdCounter = 0;
 
 // ── NPC configuration ──
 const ROAD_TILES = new Set([
@@ -28,6 +37,12 @@ export class NPC {
         this.y = row * TILE_SIZE + TILE_SIZE / 2;
         this.dir = dir;
         this.sprites = sprites;
+
+        // ── LLM greeting state ──
+        this.bubbleText = 'Hello!';
+        this.llmRequested = false;
+        this.llmDone = false;
+        this.id = ++npcIdCounter;
     }
 
     getScreenPos() {
@@ -55,19 +70,65 @@ export class NPC {
         return dx <= 1.5 && dy <= 1.5;
     }
 
+    // ── Trigger LLM greeting when player first approaches ──
+    onPlayerApproach() {
+        if (this.llmRequested) return;
+        this.llmRequested = true;
+        const status = getLLMStatus();
+        console.log(LOG_PREFIX, STYLE_INFO, `#${this.id} Player approached — LLM status: "${status}"`);
+        if (status !== 'ready') {
+            console.log(LOG_PREFIX, STYLE_WARN, `#${this.id} Showing "Hello!" only (LLM not ready)`);
+            return;
+        }
+        console.log(LOG_PREFIX, STYLE_INFO, `#${this.id} Requesting LLM greeting...`);
+        generateGreeting().then(text => {
+            if (text) {
+                this.bubbleText = text;
+                console.log(LOG_PREFIX, STYLE_OK, `#${this.id} Bubble updated → "${text}"`);
+            } else {
+                console.log(LOG_PREFIX, STYLE_WARN, `#${this.id} No text returned, keeping "Hello!"`);
+            }
+            this.llmDone = true;
+        });
+    }
+
+    // ── Reset when player leaves ──
+    onPlayerLeave() {
+        console.log(LOG_PREFIX, STYLE_INFO, `#${this.id} Player left — resetting bubble`);
+        this.bubbleText = 'Hello!';
+        this.llmRequested = false;
+        this.llmDone = false;
+    }
+
     // ── Draw comic speech bubble ──
     drawBubble(ctx, camX, camY) {
         const screen = this.getScreenPos();
         const bx = screen.x - camX;
         const by = screen.y - camY - this.sprites.frameH - 8;
-        const text = 'Hello!';
-        const pw = 6;  // padding horizontal
-        const ph = 4;  // padding vertical
+        const text = this.bubbleText;
 
+        // ── Word-wrap for longer LLM text ──
         ctx.font = 'bold 11px sans-serif';
-        const tw = ctx.measureText(text).width;
-        const bw = tw + pw * 2;
-        const bh = 16 + ph * 2;
+        const maxLineW = 120;
+        const words = text.split(' ');
+        const lines = [];
+        let line = '';
+        for (const word of words) {
+            const test = line ? line + ' ' + word : word;
+            if (ctx.measureText(test).width > maxLineW && line) {
+                lines.push(line);
+                line = word;
+            } else {
+                line = test;
+            }
+        }
+        if (line) lines.push(line);
+
+        const pw = 8;  // padding horizontal
+        const ph = 5;  // padding vertical
+        const lineH = 14;
+        const bw = Math.max(...lines.map(l => ctx.measureText(l).width)) + pw * 2;
+        const bh = lines.length * lineH + ph * 2;
         const rx = bx - bw / 2;
         const ry = by - bh;
 
@@ -100,7 +161,9 @@ export class NPC {
         ctx.fillStyle = '#222';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(text, bx, ry + bh / 2);
+        for (let i = 0; i < lines.length; i++) {
+            ctx.fillText(lines[i], bx, ry + ph + lineH * i + lineH / 2);
+        }
     }
 
     getMapRow() { return this.y / TILE_SIZE; }
