@@ -3,6 +3,7 @@ import { generateTileTextures, generatePlayerSprites } from './assets.js';
 import { generateMap, PLAYER_START, MAP_COLS, MAP_ROWS } from './map.js';
 import { Player } from './player.js';
 import { Camera } from './camera.js';
+import { createNPCs } from './npc.js';
 
 // ── Canvas setup ──
 const canvas = document.getElementById('game');
@@ -17,6 +18,7 @@ const map = generateMap();
 // ── Character selection ──
 let gameStarted = false;
 let player, camera;
+let npcs = [];
 
 const CHARACTERS = [
   { id: 'man', label: 'Man', style: 'Classic' },
@@ -146,8 +148,12 @@ async function startGame(charType) {
   canvas.removeEventListener('click', handleSelectClick);
   canvas.removeEventListener('mousemove', handleSelectMove);
 
-  const playerSprites = await generatePlayerSprites(charType);
+  const [playerSprites, loadedNPCs] = await Promise.all([
+    generatePlayerSprites(charType),
+    createNPCs(map, 30),
+  ]);
   player = new Player(PLAYER_START.col, PLAYER_START.row, playerSprites);
+  npcs = loadedNPCs;
   camera = new Camera(canvas.width, canvas.height);
   lastTime = performance.now();
   requestAnimationFrame(gameLoop);
@@ -321,14 +327,18 @@ function gameLoop(now) {
     }
   }
 
-  // Pass 2: Draw elevated tiles + player in depth order
-  const playerDepth = player.getMapRow() + player.getMapCol();
-  let playerDrawn = false;
+  // Pass 2: Draw elevated tiles + entities (player + NPCs) in depth order
+  const entities = [player, ...npcs].sort((a, b) =>
+    (a.getMapRow() + a.getMapCol()) - (b.getMapRow() + b.getMapCol())
+  );
+  let nextEntity = 0;
 
   for (let depth = minDepth; depth <= maxDepth; depth++) {
-    if (!playerDrawn && depth > playerDepth) {
-      player.draw(ctx, camera.x, camera.y);
-      playerDrawn = true;
+    // Draw entities whose depth has been passed
+    while (nextEntity < entities.length &&
+      (entities[nextEntity].getMapRow() + entities[nextEntity].getMapCol()) < depth) {
+      entities[nextEntity].draw(ctx, camera.x, camera.y);
+      nextEntity++;
     }
 
     const colMin = Math.max(startCol, depth - endRow);
@@ -349,8 +359,17 @@ function gameLoop(now) {
     }
   }
 
-  if (!playerDrawn) {
-    player.draw(ctx, camera.x, camera.y);
+  // Draw remaining entities
+  while (nextEntity < entities.length) {
+    entities[nextEntity].draw(ctx, camera.x, camera.y);
+    nextEntity++;
+  }
+
+  // Draw speech bubbles for nearby NPCs (after all sprites so bubbles are on top)
+  for (const npc of npcs) {
+    if (npc.isPlayerNear(player)) {
+      npc.drawBubble(ctx, camera.x, camera.y);
+    }
   }
 
   drawHUD();
